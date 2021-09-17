@@ -115,4 +115,4 @@ dmypy.json
 
 # Jetbrains
 .idea
-2021-09-05-adalia-info-asteroids.json
+*.json
