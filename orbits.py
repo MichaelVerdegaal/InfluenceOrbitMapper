@@ -1,7 +1,8 @@
 import matplotlib.animation as animation
 import matplotlib.pylab as plt
-import mpl_toolkits.mplot3d.axes3d as p3
 from PyAstronomy import pyasl
+
+plt.style.use('dark_background')
 
 
 def setup_ellipse(rock):
@@ -33,31 +34,29 @@ def animate_single_orbit(rock, pos, frame_count):
     :param pos: list of xyz positions
     :param frame_count: amount of frames in animation
     """
-    def animate(i, pos, red_dot):
-        red_dot.set_data([pos[i][1], pos[i][0]])
-        red_dot.set_3d_properties(pos[i][2])
-        return red_dot,
+
+    def animate(i, pos, asteroid_point):
+        asteroid_point.set_data([pos[i][1], pos[i][0]])
+        asteroid_point.set_3d_properties(pos[i][2])
+        return asteroid_point,
 
     fig = plt.figure()
-    ax = p3.Axes3D(fig)
+    ax = fig.add_subplot(projection='3d')
 
     rock_name = rock['customName'] if rock['customName'] else rock['baseName']
-    red_dot, = ax.plot(pos[::, 1], pos[::, 0], pos[::, 2], 'ro',
-                       label=rock_name)
+    asteroid_point, = ax.plot(pos[::, 1], pos[::, 0], pos[::, 2], 'ro', label=rock_name)
+
+    # Set Adalia and orbit
+    ax.plot([0], [0], [0], 'bo', markersize=9, label="Adalia")
+    ax.plot(pos[::, 1], pos[::, 0], pos[::, 2], 'w-', label="Asteroid Trajectory")
 
     # create animation using the animate() function
-    ani = animation.FuncAnimation(fig, animate, frame_count, fargs=(pos, red_dot),
-                                  interval=0.01, blit=False)
+    ani = animation.FuncAnimation(fig, animate, frame_count, fargs=(pos, asteroid_point), interval=0.01, blit=False)
 
-    ax.plot([0], [0], [0], 'bo', markersize=9, label="Adalia")
-    ax.plot(pos[::, 1], pos[::, 0], pos[::, 2], 'k-',
-            label="Asteroid Trajectory")
-
-    # Hide grid and ticks
+    # Plot styling
     ax.grid(False)
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_zticks([])
-    plt.style.use('default')
-    plt.legend()
+    plt.legend(loc="upper right")
     plt.show()
