@@ -1,6 +1,9 @@
 import json
 from math import sqrt, pow
 import pandas as pd
+import numpy as np
+from PyAstronomy import pyasl
+import matplotlib.pylab as plt
 
 """
 a: Semi-major axis
@@ -47,9 +50,29 @@ def get_roid(roids, id):
     :return: asteroid as dataframe
     """
     if 1 <= id <= 250000:
-        return roids[roids['i'] == id]
+        return roids[roids['i'] == id].to_dict(orient='records')[0]
+
+
+def setup_ellipse(rock):
+    ke = pyasl.KeplerEllipse(rock['orbital.a'],
+                             rock['orbital.T'],
+                             e=rock['orbital.e'],
+                             Omega=rock['orbital.o'],
+                             i=rock['orbital.i'],
+                             w=rock['orbital.w'])
+    return ke
 
 
 roids = load_roids("asteroids_20210811.json")
-A = get_roid(roids, 1)
-print(5)
+rock = get_roid(roids, 1)
+
+ke = setup_ellipse(rock)
+t = np.linspace(0, 4, 200)
+pos = ke.xyzPos(t)
+
+plt.plot(0, 0, 'bo', markersize=9, label="Sun")
+plt.plot(pos[::, 1], pos[::, 0], 'k-', label="Satellite Trajectory")
+plt.plot(pos[0, 1], pos[0, 0], 'r*', label="Periapsis")
+plt.legend(loc="upper right")
+plt.title('Orbital Simulation')
+plt.show()
