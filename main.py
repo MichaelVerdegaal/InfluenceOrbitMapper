@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from PyAstronomy import pyasl
 
-matplotlib.use("TkAgg")
+matplotlib.use("TkAgg") # Use the Tkinter backend to display animations
 
 
 def load_roids(json_file):
@@ -35,7 +35,7 @@ def load_roids(json_file):
 
     roids = pd.json_normalize(roids)  # Flatten nested JSON
     roids['orbital.T'] = roids.apply(lambda x: orbital_period(x['orbital.a']), axis=1)  # Add orbital period
-    roids['orbital.i'] = roids.apply(lambda x: degrees(x['orbital.i']), axis=1)
+    roids['orbital.i'] = roids.apply(lambda x: degrees(x['orbital.i']), axis=1) # Convert inclination radian to degrees
     return roids
 
 
@@ -48,6 +48,8 @@ def get_roid(roids, id):
     """
     if 1 <= id <= 250000:
         return roids[roids['i'] == id].to_dict(orient='records')[0]
+    else:
+        raise SyntaxWarning
 
 
 def setup_ellipse(rock):
@@ -67,14 +69,13 @@ def setup_ellipse(rock):
                              rock['orbital.T'],
                              e=rock['orbital.e'],
                              Omega=rock['orbital.o'],
-                             # i=rock['orbital.i'],
-                             i=0.02,
+                             i=rock['orbital.i'],
                              w=rock['orbital.w'])
     return ke
 
 
 # Get rock of choice
-roids = load_roids("asteroids_20210811.json")
+roids = load_roids("asteroids_20210917.json.json")
 rock = get_roid(roids, 1)
 print(json.dumps(rock, indent=4, sort_keys=True))
 
