@@ -1,19 +1,10 @@
 import json
 from math import sqrt, pow
-import pandas as pd
-import numpy as np
-from PyAstronomy import pyasl
-import matplotlib.pylab as plt
 
-"""
-a: Semi-major axis
-e: Eccentricity
-i: Inclination
-o: Longitude of ascending node
-w: Argument of periapsis
-m: Mean anomoly at epoch
-T: orbital period (days)
-"""
+import matplotlib.pylab as plt
+import numpy as np
+import pandas as pd
+from PyAstronomy import pyasl
 
 
 def load_roids(json_file):
@@ -54,6 +45,18 @@ def get_roid(roids, id):
 
 
 def setup_ellipse(rock):
+    """
+    Set up a PyAstronomy ellipse
+    a: Semi-major axis
+    e: Eccentricity
+    i: Inclination
+    o: Longitude of ascending node
+    w: Argument of periapsis
+    m: Mean anomoly at epoch
+    T: orbital period (days)
+    :param rock: asteroid as dict
+    :return: KeplerEllipse object
+    """
     ke = pyasl.KeplerEllipse(rock['orbital.a'],
                              rock['orbital.T'],
                              e=rock['orbital.e'],
