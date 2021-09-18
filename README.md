@@ -1,6 +1,6 @@
 # InfluencePython
 
-This is a Python script to model asteroids orbits from the Influence games. The long term goal is visualizations for
+This is a Python script to model asteroids orbits from the Influence game. The long term goal is visualizations for
 multiple orbits and route planning between a selection of asteroids.
 
 # Requirements
