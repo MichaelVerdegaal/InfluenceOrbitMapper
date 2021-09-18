@@ -34,29 +34,23 @@ def animate_single_orbit(rock, pos, frame_count):
     :param pos: list of xyz positions
     :param frame_count: amount of frames in animation
     """
-
-    def animate(i, pos, asteroid_point):
-        asteroid_point.set_data([pos[i][1], pos[i][0]])
-        asteroid_point.set_3d_properties(pos[i][2])
-        return asteroid_point,
-
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
+    fig, ax = plt.subplots(figsize=(8, 8))
+    plt.plot(pos[::, 1], pos[::, 0], 'c-')
 
     rock_name = rock['customName'] if rock['customName'] else rock['baseName']
-    asteroid_point, = ax.plot(pos[::, 1], pos[::, 0], pos[::, 2], 'ro', label=rock_name)
+    red_dot, = plt.plot(pos[0][1], pos[0][0], 'ro', label=rock_name)
 
-    # Set Adalia and orbit
-    ax.plot([0], [0], [0], 'bo', markersize=9, label="Adalia")
-    ax.plot(pos[::, 1], pos[::, 0], pos[::, 2], 'w-', label="Asteroid Trajectory")
+    def animate(i):
+        red_dot.set_data(pos[i][1], pos[i][0])
+        return red_dot,
 
     # create animation using the animate() function
-    ani = animation.FuncAnimation(fig, animate, frame_count, fargs=(pos, asteroid_point), interval=0.01, blit=False)
+    my_animation = animation.FuncAnimation(fig, animate, frames=frame_count, interval=0.01, blit=True, repeat=True)
+    plt.plot(0, 0, 'bo', markersize=9, label="Adalia")
 
-    # Plot styling
-    ax.grid(False)
-    ax.set_xticks([])
-    ax.set_yticks([])
-    ax.set_zticks([])
+    # Misc styling
+    plt.style.use('default')
+    plt.title('Orbital Simulation')
+    plt.axis('off')
     plt.legend(loc="upper right")
     plt.show()

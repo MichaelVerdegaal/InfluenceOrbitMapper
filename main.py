@@ -11,7 +11,6 @@ matplotlib.use("TkAgg")  # Use the Tkinter backend to display animations
 # Get rock of choice
 roids = load_roids("asteroids_20210917.json")
 rock = get_roid(roids, 1)
-print(json.dumps(rock, indent=4, sort_keys=True))
 
 # Get rock orbit
 ke = setup_ellipse(rock)
