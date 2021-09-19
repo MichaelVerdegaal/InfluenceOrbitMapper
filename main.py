@@ -1,14 +1,16 @@
 import matplotlib
-import numpy as np
 
 from asteroids import load_roids, get_roid
-from orbits import *
+from plotting import plot_asteroid_paths
 
+# Initialization
+print('Booting up...')
 matplotlib.use("TkAgg")  # Use the Tkinter backend to display animations
+roids = load_roids("asteroids_20210917.json")
 
 # Get rock of choice
-roids = load_roids("asteroids_20210917.json")
-rock = get_roid(roids, 1)
+adalia_prime = get_roid(roids, 1)
+saturnus = get_roid(roids, 249999)
 
-# print(position_at_adalia_day(rock, 3705.87))
-print(get_current_adalia_day())
+# print('Plotting rocks')
+plot_asteroid_paths(saturnus, adalia_prime)

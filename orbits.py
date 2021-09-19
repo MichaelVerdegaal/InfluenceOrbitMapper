@@ -1,10 +1,8 @@
-import matplotlib.animation as animation
-import matplotlib.pylab as plt
-from PyAstronomy import pyasl
 import arrow
+import numpy as np
+from PyAstronomy import pyasl
 
-plt.style.use('dark_background')
-START_TIMESTAMP = '2021-04-17T14:00:39.062182+00:00'
+START_TIMESTAMP = '2021-04-17T10:00:00+00:00'
 
 
 def setup_ellipse(rock):
@@ -29,35 +27,6 @@ def setup_ellipse(rock):
     return ke
 
 
-def animate_single_orbit(rock, pos, frame_count):
-    """
-    Animates a single asteroid orbit around Adalia
-    :param rock: asteroid as dict
-    :param pos: list of xyz positions
-    :param frame_count: amount of frames in animation
-    """
-    fig, ax = plt.subplots(figsize=(8, 8))
-    plt.plot(pos[::, 1], pos[::, 0], 'c-')
-
-    rock_name = rock['customName'] if rock['customName'] else rock['baseName']
-    red_dot, = plt.plot(pos[0][1], pos[0][0], 'ro', label=rock_name)
-
-    def animate(i):
-        red_dot.set_data(pos[i][1], pos[i][0])
-        return red_dot,
-
-    # create animation using the animate() function
-    my_animation = animation.FuncAnimation(fig, animate, frames=frame_count, interval=0.01, blit=True, repeat=True)
-    plt.plot(0, 0, 'bo', markersize=9, label="Adalia")
-
-    # Misc styling
-    plt.style.use('default')
-    plt.title('Orbital Simulation')
-    plt.axis('off')
-    plt.legend(loc="upper right")
-    plt.show()
-
-
 def position_at_adalia_day(rock, adalia_day):
     """
     Gets the xyz position of a rock at a set adalia day (one real day = 24 adalia days)
@@ -73,9 +42,19 @@ def position_at_adalia_day(rock, adalia_day):
         return [0, 0, 0]
 
 
+def full_position(rock):
+    orbit = setup_ellipse(rock)
+    t = np.linspace(0, rock['orbital.T'], rock['orbital.T'])
+    return orbit.xyzPos(t)
+
+
 def get_current_adalia_day():
+    """
+    Get the current adalia day at current time
+    :return: adalia day
+    """
     start_time = arrow.get(START_TIMESTAMP)
     current_time = arrow.utcnow()
-    # time diff in seconds --> hours --> days --> adalia days
+    # time diff in seconds --> hours --> days --> adalia days. Converted from seconds as it's more precise.
     adalia_days = ((current_time - start_time).total_seconds() / 60 / 60 / 24) * 24
     return adalia_days
