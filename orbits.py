@@ -1,8 +1,10 @@
 import matplotlib.animation as animation
 import matplotlib.pylab as plt
 from PyAstronomy import pyasl
+import arrow
 
 plt.style.use('dark_background')
+START_TIMESTAMP = '2021-04-17T14:00:39.062182+00:00'
 
 
 def setup_ellipse(rock):
@@ -54,3 +56,26 @@ def animate_single_orbit(rock, pos, frame_count):
     plt.axis('off')
     plt.legend(loc="upper right")
     plt.show()
+
+
+def position_at_adalia_day(rock, adalia_day):
+    """
+    Gets the xyz position of a rock at a set adalia day (one real day = 24 adalia days)
+    :param rock: asteroid as dict
+    :param adalia_day: day to check, has to be larger than 0
+    :return: xyz position of asteroid
+    """
+    if adalia_day > 0:
+        day = adalia_day % rock['orbital.T']
+        orbit = setup_ellipse(rock)
+        return orbit.xyzPos(day)
+    else:
+        return [0, 0, 0]
+
+
+def get_current_adalia_day():
+    start_time = arrow.get(START_TIMESTAMP)
+    current_time = arrow.utcnow()
+    # time diff in seconds --> hours --> days --> adalia days
+    adalia_days = ((current_time - start_time).total_seconds() / 60 / 60 / 24) * 24
+    return adalia_days
