@@ -55,6 +55,19 @@ def get_current_adalia_day():
     """
     start_time = arrow.get(START_TIMESTAMP)
     current_time = arrow.utcnow()
-    # time diff in seconds --> hours --> days --> adalia days. Converted from seconds as it's more precise.
-    adalia_days = ((current_time - start_time).total_seconds() / 60 / 60 / 24) * 24
+    # Time diff in seconds then hours to get adalia days. 1 irl hour = 1 adalia day. Converted from seconds
+    # as it's more precise.
+    adalia_days = (current_time - start_time).total_seconds() / 60 / 60
+    return adalia_days
+
+
+def get_adalia_day_at_time(timestamp):
+    """
+    Get the  adalia day at a specified time
+    :param timestamp: timestamp. Has to be after the START_TIMESTAMP of 2021-04-17 14:00
+    :return: adalia day at date
+    """
+    start_time = arrow.get(START_TIMESTAMP)
+    time = arrow.get(timestamp)
+    adalia_days = (time - start_time).total_seconds() / 60 / 60
     return adalia_days
