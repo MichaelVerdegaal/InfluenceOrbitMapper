@@ -7,7 +7,7 @@ import matplotlib
 
 from asteroids import load_roids, get_roid
 from orbits import reverse_search_starting_orbit_day
-from plotting import plot_asteroid_paths
+from plotting import plot_roids
 
 # Initialization
 print('Booting up...')
@@ -18,9 +18,11 @@ roids = load_roids("asteroids_20210917.json")
 rock_1 = get_roid(roids, 1)
 rock_2 = get_roid(roids, 249999)
 
-# print('Plotting rocks')
-# plot_asteroid_paths(rock_1, rock_2)
-
 # Attempt at reverse engineering coord matching
 reverse_search_starting_orbit_day(rock_1)
 reverse_search_starting_orbit_day(rock_2)
+
+# print('Plotting rocks')
+# plot_asteroid_paths(rock_1, rock_2)
+
+plot_roids(rock_1)
