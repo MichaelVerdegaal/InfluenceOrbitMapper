@@ -2,7 +2,6 @@ import math
 
 import arrow
 import numpy as np
-from PyAstronomy import pyasl
 
 START_TIMESTAMP = '2021-04-17T14:00:00+00:00'
 
