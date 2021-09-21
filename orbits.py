@@ -7,50 +7,13 @@ from PyAstronomy import pyasl
 START_TIMESTAMP = '2021-04-17T14:00:00+00:00'
 
 
-def setup_ellipse(rock):
-    """
-    Set up a PyAstronomy ellipse
-    a: Semi-major axis
-    e: Eccentricity
-    i: Inclination
-    o: Longitude of ascending node
-    w: Argument of periapsis
-    m: Mean anomoly at epoch
-    T: orbital period (days)
-    :param rock: asteroid as dict
-    :return: KeplerEllipse object
-    """
-    ke = pyasl.KeplerEllipse(rock['orbital.a'],
-                             rock['orbital.T'],
-                             e=rock['orbital.e'],
-                             Omega=rock['orbital.o'],
-                             i=rock['orbital.i'],
-                             w=rock['orbital.w'])
-    return ke
-
-
 def position_at_adalia_day(rock, adalia_day):
-    """
-    Gets the xyz position of a rock at a set adalia day (one real day = 24 adalia days)
-    :param rock: asteroid as dict
-    :param adalia_day: day to check, has to be larger than 0
-    :return: xyz position of asteroid
-    """
-    if adalia_day > 0:
-        day = adalia_day % rock['orbital.T']
-        orbit = setup_ellipse(rock)
-        return orbit.xyzPos(day)
-    else:
-        return [0, 0, 0]
-
-
-def position_at_adalia_day_manual(rock, adalia_day):
     """
     Direct copy of https://github.com/Influenceth/influence-utils/blob/00f6838b616d5c7113720b0f883c2a2d55a41267/index.js#L288
     Translated from JS to Python
-    :param rock:
-    :param adalia_day:
-    :return:
+    :param rock: asteroid as dict
+    :param adalia_day: adalia day to calculate from
+    :return: xyz position as numpy array
     """
     a = rock['orbital.a']
     e = rock['orbital.e']
@@ -91,9 +54,12 @@ def position_at_adalia_day_manual(rock, adalia_day):
 
 
 def full_position(rock):
-    orbit = setup_ellipse(rock)
-    t = np.linspace(0, rock['orbital.T'], rock['orbital.T'])
-    return orbit.xyzPos(t)
+    """
+    Calculate positions vectors for the entire orbit of an asteroid
+    :param rock: asteroid as dict
+    :return: position vectors as numpy array
+    """
+    return np.array([position_at_adalia_day(rock, day) for day in range(rock['orbital.T'])])
 
 
 def get_current_adalia_day():
@@ -119,3 +85,27 @@ def get_adalia_day_at_time(timestamp):
     time = arrow.get(timestamp)
     adalia_days = (time - start_time).total_seconds() / 60 / 60
     return adalia_days
+
+
+def reverse_search_starting_orbit_day(rock, sensitivity=2):
+    """
+    In the JSON file there's a bunch of XYZ coordinates, this is a helper method to calculate at what starting day
+    of orbital period T these were measured.
+    :param rock: asteroid as dict
+    :param sensitivity: At which decimals the coordinates are rounded, and consuquently matched
+    """
+    x, y, z = rock['p.x'], rock['p.y'], rock['p.z']
+
+    match_list = []
+    for day in range(rock['orbital.T']):
+        pos = position_at_adalia_day(rock, day)
+        x_match = round(pos[0], sensitivity) == round(x, sensitivity)
+        y_match = round(pos[1], sensitivity) == round(y, sensitivity)
+        z_match = round(pos[2], sensitivity) == round(z, sensitivity)
+        if x_match and y_match and z_match:
+            match_list.append({'T': day, 'p': pos})
+
+    for match in match_list:
+        rock_name = c if (c := rock['customName']) else rock['baseName']
+        print(f"Coordinate match at {match['T']}/{rock['orbital.T']} for asteroid {rock_name}."
+              f"(Calculated: {match['p']}, Expected: {[x, y, z]})")
