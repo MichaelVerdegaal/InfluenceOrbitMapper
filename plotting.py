@@ -6,36 +6,7 @@ from orbits import get_current_adalia_day, position_at_adalia_day, full_position
 
 AU_multiplier = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
-
 plt.style.use('dark_background')
-
-
-def animate_single_orbit(rock, pos, frame_count):
-    """
-    Animates a single asteroid orbit around Adalia
-    :param rock: asteroid as dict
-    :param pos: list of xyz positions
-    :param frame_count: amount of frames in animation
-    """
-    fig, ax = plt.subplots(figsize=(8, 8))
-    plt.plot(pos[::, 1], pos[::, 0], 'c-')
-
-    rock_name = rock['customName'] if rock['customName'] else rock['baseName']
-    red_dot, = plt.plot(pos[0][1], pos[0][0], 'ro', label=rock_name)
-
-    def animate(i):
-        red_dot.set_data(pos[i][1], pos[i][0])
-        return red_dot,
-
-    # create animation using the animate() function
-    my_animation = animation.FuncAnimation(fig, animate, frames=frame_count, interval=0.01, blit=True, repeat=True)
-    plt.plot(0, 0, 'bo', markersize=9, label="Adalia")
-
-    # Misc styling
-    plt.title('Orbital Simulation')
-    plt.axis('off')
-    plt.legend(loc="upper right")
-    plt.show()
 
 
 def spheres(size, clr, dist=0):
@@ -69,36 +40,40 @@ def annot(xcrd, zcrd, txt, xancr='center'):
     return strng
 
 
-def plot_roids(rock):
-    # Rock data
+def plot_asteroids(*rocks):
+    asteroid_spheres = []
+    asteroid_orbits = []
     curr_aday = get_current_adalia_day()
-    cur_pos = position_at_adalia_day(rock, curr_aday)
-    pos = full_position(rock)
-    semi_major_axis = rock['orbital.a']
 
-    # Setup
-    print(rock['orbital.a'], semi_major_axis * AU_multiplier)
-    distance_from_sun = [0, semi_major_axis * AU_multiplier]
+    # Set up Adalia sphere
+    trace_adalia_sphere = spheres(20, '#bfbfbf', 0)
 
-    # Create spheres for the Sun and planets
-    trace_adalia_sphere = spheres(20, '#ffffff', distance_from_sun[0])
-    trace_rock_sphere = spheres(5, '#325bff', distance_from_sun[1])
+    # Set up asteroid orbits/spheres
+    for rock in rocks:
+        # Rock data
+        cur_pos = position_at_adalia_day(rock, curr_aday)
+        coordinates = full_position(rock)
+        semi_major_axis = rock['orbital.a']
 
-    # Set up orbit traces
-    trace_rock_orbit = orbits(pos)
+        # Set up orbit traces
+        trace_rock_orbit = orbits(coordinates)
+        asteroid_orbits.append(trace_rock_orbit)
+
+        # Create asteroid spheres
+        # trace_rock_sphere = spheres(5, '#325bff', semi_major_axis * AU_multiplier)
 
     layout = go.Layout(title='Adalia System', showlegend=False, margin=dict(l=0, r=0, t=0, b=0),
                        scene=dict(xaxis=dict(title='Distance from Sun', titlefont_color='black',
-                                             range=[-7000, 7000], backgroundcolor='black', color='black',
+                                             range=[-1000, 1000], backgroundcolor='black', color='black',
                                              gridcolor='black'),
                                   yaxis=dict(title='Distance from Sun', titlefont_color='black',
-                                             range=[-7000, 7000], backgroundcolor='black', color='black',
+                                             range=[-1000, 1000], backgroundcolor='black', color='black',
                                              gridcolor='black'),
-                                  zaxis=dict(title='', range=[-7000, 7000], backgroundcolor='black', color='white',
+                                  zaxis=dict(title='', range=[-1000, 1000], backgroundcolor='black', color='white',
                                              gridcolor='black'),
-                                  annotations=[annot(distance_from_sun[0], 40, 'Adalia', xancr='left')]
-                                  ))
+                                  annotations=[annot(0, 40, 'Adalia', xancr='left')]
+                                  )
+                       )
 
-    fig = go.Figure(data=[trace_adalia_sphere, trace_rock_sphere, trace_rock_orbit], layout=layout)
-
+    fig = go.Figure(data=[trace_adalia_sphere, *asteroid_orbits], layout=layout)
     fig.show()
