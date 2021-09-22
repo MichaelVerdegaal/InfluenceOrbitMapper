@@ -7,6 +7,13 @@ AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
 
 def spheres(size, pos, clr):
+    """
+    Return a trace for an asteroid as a sphere
+    :param size: sphere size
+    :param pos: xyz coordinates
+    :param clr: color
+    :return: trace
+    """
     # xyz position of asteroid
     x, y, z = pos[0] * AU_MULTIPLIER, pos[1] * AU_MULTIPLIER, pos[2] * AU_MULTIPLIER
 
