@@ -1,15 +1,12 @@
 import numpy as np
 import plotly.graph_objects as go
-from matplotlib import pylab as plt, animation as animation
 
 from orbits import get_current_adalia_day, position_at_adalia_day, full_position
 
 AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
-plt.style.use('dark_background')
 
-
-def spheres(size, pos, clr, dist=0):
+def spheres(size, pos, clr):
     # xyz position of asteroid
     x, y, z = pos[0] * AU_MULTIPLIER, pos[1] * AU_MULTIPLIER, pos[2] * AU_MULTIPLIER
 
@@ -60,7 +57,7 @@ def plot_asteroids(*rocks):
     curr_aday = get_current_adalia_day()
 
     # Set up Adalia sphere
-    trace_adalia_sphere = spheres(25, [0, 0, 0], '#bfbfbf', 0)
+    trace_adalia_sphere = spheres(25, [0, 0, 0], '#bfbfbf')
 
     # Set up asteroid orbits/spheres
     for rock in rocks:
@@ -74,7 +71,7 @@ def plot_asteroids(*rocks):
 
         # Create asteroid spheres
         dist = rock['orbital.a'] * AU_MULTIPLIER
-        trace_rock_sphere = spheres(10, cur_pos, '#FFFF00', dist)
+        trace_rock_sphere = spheres(10, cur_pos, '#FFFF00')
         asteroid_spheres.append(trace_rock_sphere)
 
     layout = go.Layout(title='Adalia System', showlegend=False, margin=dict(l=0, r=0, t=0, b=0),
