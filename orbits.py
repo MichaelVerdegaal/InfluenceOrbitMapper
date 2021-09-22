@@ -21,6 +21,7 @@ def position_at_adalia_day(rock, adalia_day):
     o = rock['orbital.o']
     w = rock['orbital.w']
     m = rock['orbital.m']
+    adalia_day = adalia_day % rock['orbital.T']
 
     # Calculate the longitude of perihelion
     p = w + o
@@ -105,6 +106,6 @@ def reverse_search_starting_orbit_day(rock, sensitivity=2):
             match_list.append({'T': day, 'p': pos})
 
     for match in match_list:
-        rock_name = c if (c := rock['customName']) else rock['baseName']
+        rock_name = rock['customName'] if str(rock['customName']) != 'nan' else rock['baseName']
         print(f"Coordinate match at {match['T']}/{rock['orbital.T']} for asteroid {rock_name}."
               f"(Calculated: {match['p']}, Expected: {[x, y, z]})")

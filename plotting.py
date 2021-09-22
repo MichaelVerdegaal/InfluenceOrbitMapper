@@ -41,9 +41,18 @@ def orbits(coordinates, clr='white', wdth=2):
     return trace
 
 
-def annot(xcrd, zcrd, txt, xancr='center'):
-    strng = dict(showarrow=False, x=xcrd, y=0, z=zcrd, text=txt, xanchor=xancr, font=dict(color='white', size=12))
-    return strng
+def annot(xcrd, ycrd, zcrd, txt, xancr='left'):
+    """
+    Annotation structure function for plotly
+    :param xcrd: x position
+    :param ycrd: y position
+    :param zcrd: z position
+    :param txt: annotation name
+    :param xancr: anchor position
+    :return: annotation as dict
+    """
+    annotation = dict(showarrow=False, x=xcrd, y=ycrd, z=zcrd, text=txt, xanchor=xancr, font=dict(color='white', size=12))
+    return annotation
 
 
 def plot_asteroids(*rocks):
@@ -51,13 +60,14 @@ def plot_asteroids(*rocks):
     Plot asteroids in 3d space around Adalia
     :param rocks: indefinite amount of asteroids (as dict)
     """
+    # Set up Adalia sphere
+    trace_adalia_sphere = spheres(25, [0, 0, 0], '#bfbfbf')
+
     # Init
     asteroid_spheres = []
     asteroid_orbits = []
+    annotations = [annot(0, 0, 40, 'Adalia')]
     curr_aday = get_current_adalia_day()
-
-    # Set up Adalia sphere
-    trace_adalia_sphere = spheres(25, [0, 0, 0], '#bfbfbf')
 
     # Set up asteroid orbits/spheres
     for rock in rocks:
@@ -73,6 +83,14 @@ def plot_asteroids(*rocks):
         trace_rock_sphere = spheres(10, cur_pos, '#FFFF00')
         asteroid_spheres.append(trace_rock_sphere)
 
+        # Create annotation
+        rock_name = rock['customName'] if str(rock['customName']) != 'nan' else rock['baseName']
+        rock_annotation = annot(cur_pos[0] * AU_MULTIPLIER,
+                                cur_pos[1] * AU_MULTIPLIER,
+                                (cur_pos[2] * AU_MULTIPLIER) + 20,
+                                rock_name)
+        annotations.append(rock_annotation)
+
     layout = go.Layout(title='Adalia System', showlegend=False, margin=dict(l=0, r=0, t=0, b=0),
                        scene=dict(xaxis=dict(title='Distance from Sun', titlefont_color='black',
                                              range=[-1000, 1000], backgroundcolor='black', color='black',
@@ -82,7 +100,7 @@ def plot_asteroids(*rocks):
                                              gridcolor='black'),
                                   zaxis=dict(title='', range=[-1000, 1000], backgroundcolor='black', color='white',
                                              gridcolor='black'),
-                                  annotations=[annot(0, 40, 'Adalia', xancr='left')]
+                                  annotations=annotations
                                   )
                        )
 
