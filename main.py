@@ -3,8 +3,8 @@ Everything in this file is experimental for now, and will not reflect the conten
 production ready.
 """
 
-from asteroids import load_roids, get_roid
-from plotting import plot_asteroids
+from modules.asteroids import load_roids, get_roid
+from modules.plotting import plot_asteroids
 
 # Initialization
 print('Booting up...')

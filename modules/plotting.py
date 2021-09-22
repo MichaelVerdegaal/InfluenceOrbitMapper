@@ -1,7 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
 
-from orbits import get_current_adalia_day, full_position, position_at_adalia_day
+from modules.orbits import get_current_adalia_day, full_position, position_at_adalia_day
 
 AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
