@@ -1,7 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
 
-from orbits import get_current_adalia_day, position_at_adalia_day, full_position
+from orbits import get_current_adalia_day, full_position, position_at_adalia_day
 
 AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
@@ -70,7 +70,6 @@ def plot_asteroids(*rocks):
         asteroid_orbits.append(trace_rock_orbit)
 
         # Create asteroid spheres
-        dist = rock['orbital.a'] * AU_MULTIPLIER
         trace_rock_sphere = spheres(10, cur_pos, '#FFFF00')
         asteroid_spheres.append(trace_rock_sphere)
 

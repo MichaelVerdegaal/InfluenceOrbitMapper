@@ -32,7 +32,6 @@ def position_at_adalia_day(rock, adalia_day):
     M = m + (n * adalia_day)
 
     # Estimate the eccentric and true anomolies using an iterative approximation let E1let E = M let lastDiff = 1
-    E1 = None
     E = M
     last_diff = 1
 

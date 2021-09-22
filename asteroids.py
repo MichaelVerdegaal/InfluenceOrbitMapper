@@ -1,5 +1,5 @@
 import json
-from math import sqrt, pow, degrees
+from math import sqrt, pow
 
 import pandas as pd
 
@@ -27,7 +27,6 @@ def load_roids(json_file):
 
     roids = pd.json_normalize(roids)  # Flatten nested JSON
     roids['orbital.T'] = roids.apply(lambda x: orbital_period(x['orbital.a']), axis=1)  # Add orbital period
-    # roids['orbital.i'] = roids.apply(lambda x: degrees(x['orbital.i']), axis=1)  # Convert inclination radian to degrees
     return roids
 
 
