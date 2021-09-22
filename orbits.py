@@ -1,6 +1,6 @@
 import math
 
-import arrow
+import pendulum
 import numpy as np
 
 START_TIMESTAMP = '2021-04-17T14:00:00+00:00'
@@ -8,8 +8,9 @@ START_TIMESTAMP = '2021-04-17T14:00:00+00:00'
 
 def position_at_adalia_day(rock, adalia_day):
     """
-    Direct copy of https://github.com/Influenceth/influence-utils/blob/00f6838b616d5c7113720b0f883c2a2d55a41267/index.js#L288
-    Translated from JS to Python
+    Calculates the xyz coordinates of an asteroid at a certain adalia day Direct copy of
+    https://github.com/Influenceth/influence-utils/blob/00f6838b616d5c7113720b0f883c2a2d55a41267/index.js#L288
+    Translated from JS to Python.
     :param rock: asteroid as dict
     :param adalia_day: adalia day to calculate from
     :return: xyz position as numpy array
@@ -65,8 +66,8 @@ def get_current_adalia_day():
     Get the current adalia day at current time
     :return: adalia day
     """
-    start_time = arrow.get(START_TIMESTAMP)
-    current_time = arrow.utcnow()
+    start_time = pendulum.parse(START_TIMESTAMP)
+    current_time = pendulum.now()
     # Time diff in seconds then hours to get adalia days. 1 irl hour = 1 adalia day. Converted from seconds instead of
     # days as it's more precise.
     adalia_days = (current_time - start_time).total_seconds() / 60 / 60
@@ -79,8 +80,8 @@ def get_adalia_day_at_time(timestamp):
     :param timestamp: timestamp. Has to be after the START_TIMESTAMP of 2021-04-17 14:00
     :return: adalia day at date
     """
-    start_time = arrow.get(START_TIMESTAMP)
-    time = arrow.get(timestamp)
+    start_time = pendulum.parse(START_TIMESTAMP)
+    time = pendulum.parse(timestamp)
     adalia_days = (time - start_time).total_seconds() / 60 / 60
     return adalia_days
 
