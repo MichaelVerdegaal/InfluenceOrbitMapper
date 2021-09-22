@@ -10,19 +10,17 @@ plt.style.use('dark_background')
 
 
 def spheres(size, pos, clr, dist=0):
-    x, y, z = pos[0], pos[1], pos[2]
+    # xyz position of asteroid
+    x, y, z = pos[0] * AU_MULTIPLIER, pos[1] * AU_MULTIPLIER, pos[2] * AU_MULTIPLIER
 
     # Set up 100 points. First, do angles
     theta = np.linspace(0, 2 * np.pi, 100)
     phi = np.linspace(0, np.pi, 100)
 
     # Set up coordinates for points on the sphere
-    x0 = dist + size * np.outer(np.cos(theta), np.sin(phi))
-    y0 = size * np.outer(np.sin(theta), np.sin(phi))
-    z0 = size * np.outer(np.ones(100), np.cos(phi))
-    # x0 = x + size * np.outer(np.cos(theta), np.sin(phi))
-    # y0 = y + size * np.outer(np.sin(theta), np.sin(phi))
-    # z0 = z + size * np.outer(np.ones(100), np.cos(phi))
+    x0 = x + size * np.outer(np.cos(theta), np.sin(phi))
+    y0 = y + size * np.outer(np.sin(theta), np.sin(phi))
+    z0 = z + size * np.outer(np.ones(100), np.cos(phi))
 
     # Set up trace
     trace = go.Surface(x=x0, y=y0, z=z0, colorscale=[[0, clr], [1, clr]])
@@ -62,7 +60,7 @@ def plot_asteroids(*rocks):
     curr_aday = get_current_adalia_day()
 
     # Set up Adalia sphere
-    trace_adalia_sphere = spheres(20, [0, 0, 0], '#bfbfbf', 0)
+    trace_adalia_sphere = spheres(25, [0, 0, 0], '#bfbfbf', 0)
 
     # Set up asteroid orbits/spheres
     for rock in rocks:
@@ -76,7 +74,7 @@ def plot_asteroids(*rocks):
 
         # Create asteroid spheres
         dist = rock['orbital.a'] * AU_MULTIPLIER
-        trace_rock_sphere = spheres(5, cur_pos, '#325bff', dist)
+        trace_rock_sphere = spheres(10, cur_pos, '#FFFF00', dist)
         asteroid_spheres.append(trace_rock_sphere)
 
     layout = go.Layout(title='Adalia System', showlegend=False, margin=dict(l=0, r=0, t=0, b=0),
