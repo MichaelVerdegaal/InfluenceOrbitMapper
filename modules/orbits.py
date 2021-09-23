@@ -86,26 +86,3 @@ def get_adalia_day_at_time(timestamp):
     adalia_days = (time - start_time).total_seconds() / 60 / 60
     return adalia_days
 
-
-def reverse_search_starting_orbit_day(rock, sensitivity=2):
-    """
-    In the JSON file there's a bunch of XYZ coordinates, this is a helper method to calculate at what starting day
-    of orbital period T these were measured.
-    :param rock: asteroid as dict
-    :param sensitivity: At which decimals the coordinates are rounded, and consuquently matched
-    """
-    x, y, z = rock['p.x'], rock['p.y'], rock['p.z']
-
-    match_list = []
-    for day in range(rock['orbital.T']):
-        pos = position_at_adalia_day(rock, day)
-        x_match = round(pos[0], sensitivity) == round(x, sensitivity)
-        y_match = round(pos[1], sensitivity) == round(y, sensitivity)
-        z_match = round(pos[2], sensitivity) == round(z, sensitivity)
-        if x_match and y_match and z_match:
-            match_list.append({'T': day, 'p': pos})
-
-    for match in match_list:
-        rock_name = rock['customName'] if str(rock['customName']) != 'nan' else rock['baseName']
-        print(f"Coordinate match at {match['T']}/{rock['orbital.T']} for asteroid {rock_name}."
-              f"(Calculated: {match['p']}, Expected: {[x, y, z]})")
