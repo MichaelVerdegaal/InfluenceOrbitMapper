@@ -3,7 +3,8 @@ import math
 import pendulum
 import numpy as np
 
-START_TIMESTAMP = '2021-01-01T00:00:00+00:00'
+START_ORBIT_TIMESTAMP = '2021-01-01T00:00:00+00:00'  # Orbit day zero
+START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The Arrival")
 
 
 def position_at_adalia_day(rock, adalia_day):
@@ -62,12 +63,17 @@ def full_position(rock):
     return np.array([position_at_adalia_day(rock, day) for day in range(rock['orbital.T'])])
 
 
-def get_current_adalia_day():
+def get_current_adalia_day(display_day=False):
     """
     Get the current adalia day at current time
+    :param display_day: Which timestamp to use. If true will result in the display date (such as on the website), if
+    false can be used to calculate the positions in orbit
     :return: adalia day
     """
-    start_time = pendulum.parse(START_TIMESTAMP)
+    timestamp = START_ORBIT_TIMESTAMP
+    if display_day:
+        timestamp = START_ARRIVAL_TIMESTAMP
+    start_time = pendulum.parse(timestamp)
     current_time = pendulum.now()
     # Time diff in seconds then hours to get adalia days. 1 irl hour = 1 adalia day. Converted from seconds instead of
     # days as it's more precise.
@@ -81,8 +87,7 @@ def get_adalia_day_at_time(timestamp):
     :param timestamp: timestamp. Has to be after the START_TIMESTAMP of 2021-04-17 14:00
     :return: adalia day at date
     """
-    start_time = pendulum.parse(START_TIMESTAMP)
+    start_time = pendulum.parse(START_ORBIT_TIMESTAMP)
     time = pendulum.parse(timestamp)
     adalia_days = (time - start_time).total_seconds() / 60 / 60
     return adalia_days
-
