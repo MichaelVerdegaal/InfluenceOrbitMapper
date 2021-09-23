@@ -75,7 +75,7 @@ def plot_asteroids(*rocks):
     asteroid_orbits = []
     annotations = [annot(0, 0, 40, 'Adalia')]
     curr_aday = get_current_adalia_day()
-    print(f"Plotting asteroids at day {round(curr_aday, 2)}...")
+    print(f"Plotting asteroids at day {round(get_current_adalia_day(display_day=True), 2)}...")
 
     # Set up asteroid orbits/spheres
     for rock in rocks:
