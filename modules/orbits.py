@@ -3,7 +3,7 @@ import math
 import pendulum
 import numpy as np
 
-START_TIMESTAMP = '2021-04-17T14:00:00+00:00'
+START_TIMESTAMP = '2021-01-01T00:00:00+00:00'
 
 
 def position_at_adalia_day(rock, adalia_day):
