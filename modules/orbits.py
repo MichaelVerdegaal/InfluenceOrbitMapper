@@ -60,7 +60,7 @@ def full_position(rock):
     :param rock: asteroid as dict
     :return: position vectors as numpy array
     """
-    return np.array([position_at_adalia_day(rock, day) for day in range(rock['orbital.T'])])
+    return np.array([position_at_adalia_day(rock, day) for day in range(rock['orbital.T'] + 1)])
 
 
 def get_current_adalia_day(display_day=False):
