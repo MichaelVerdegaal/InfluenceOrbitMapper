@@ -1,3 +1,5 @@
+import itertools
+
 import numpy as np
 import plotly.graph_objects as go
 
@@ -62,6 +64,19 @@ def annot(xcrd, ycrd, zcrd, txt, xancr='left'):
     return annotation
 
 
+def create_dimensional_anchors():
+    """
+    Sets up traces in the corner of the 3d view, which keeps the spheres from deflating.
+    :return:
+    """
+    corner_combos = list(itertools.product([1000, -1000], [1000, -1000], [1000, -1000]))
+    trace_list = []
+    # for c in corner_combos:
+    #     trace = go.Scatter3d(x=[c[0]], y=[c[1]], z=[c[2]], marker=dict(size=0.01), line=dict(color="#171717"))
+    #     trace_list.append(trace)
+    return trace_list
+
+
 def plot_asteroids(*rocks):
     """
     Plot asteroids in 3d space around Adalia
@@ -70,13 +85,15 @@ def plot_asteroids(*rocks):
     # Set up Adalia sphere
     trace_adalia_sphere = spheres(25, [0, 0, 0], '#bfbfbf')
 
+    # Set up anchors in the corners to keep spheres from deflating
+    anchors = create_dimensional_anchors()
+
     # Init
     asteroid_spheres = []
     asteroid_orbits = []
     annotations = [annot(0, 0, 40, 'Adalia')]
     curr_aday = get_current_adalia_day()
     print(f"Plotting asteroids at day {round(get_current_adalia_day(display_day=True), 2)}...")
-
     # Set up asteroid orbits/spheres
     for rock in rocks:
         # Rock data
@@ -112,5 +129,5 @@ def plot_asteroids(*rocks):
                                   )
                        )
 
-    fig = go.Figure(data=[trace_adalia_sphere, *asteroid_orbits, *asteroid_spheres], layout=layout)
+    fig = go.Figure(data=[trace_adalia_sphere, *asteroid_orbits, *asteroid_spheres, *anchors], layout=layout)
     fig.show()

@@ -13,10 +13,11 @@ roids = load_roids("asteroids_20210917.json")
 # Get rock of choice
 rocks = [
     get_roid(roids, 1),  # Adalia prime
-    # get_roid(roids, 250000),  # Very far away
-    # get_roid(roids, 235773),  # Extremely high inclination/eccentricity
-    # get_roid(roids, 104),
+    get_roid(roids, 250000),  # Very far away
+    get_roid(roids, 235773),  # Extremely high inclination/eccentricity
+    get_roid(roids, 104),
     get_roid(roids, 249999)
 ]
+
 
 plot_asteroids(*rocks)
