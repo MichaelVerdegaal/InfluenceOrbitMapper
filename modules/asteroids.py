@@ -3,6 +3,8 @@ from math import sqrt, pow
 
 import pandas as pd
 
+SIZES = ['SMALL', 'MEDIUM', 'LARGE', 'HUGE']
+
 
 def load_roids(json_file):
     """
@@ -41,3 +43,19 @@ def get_roid(roids, id):
         return roids[roids['i'] == id].to_dict(orient='records')[0]
     else:
         raise SyntaxWarning("Improper asteroid ID")
+
+
+def radius_to_size(r):
+    """
+    Convert asteroid radius to size category
+    :param r: radius
+    :return: category as string
+    """
+    if r <= 5000:
+        return SIZES[0]
+    elif r <= 20000:
+        return SIZES[1]
+    elif r <= 50000:
+        return SIZES[2]
+    else:
+        return SIZES[3]

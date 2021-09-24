@@ -14,7 +14,7 @@ roids = load_roids("asteroids_20210917.json")
 # Get rock of choice
 print("Please enter up to 10 asteroid numbers. Enter a non-number to continue")
 templates = {'orbit_test': [1, 4148],  # Used to confirm correct orbit calculations via game website comparisons
-             'demo': [1, 250000, 249999, 104, 235773, 13],  # Default asteroid choices
+             'demo': [1, 250000, 249999, 104, 235773, 13, 4148],  # Default asteroid choices
              'stress_test': np.linspace(1, 50, 50)}  # Stress test
 rocks = []
 while len(rocks) < 9:

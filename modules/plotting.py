@@ -4,6 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 from modules.orbits import get_current_adalia_day, full_position, position_at_adalia_day
+from modules.asteroids import radius_to_size
 
 AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
@@ -60,7 +61,8 @@ def annot(xcrd, ycrd, zcrd, txt, xancr='left'):
     :param xancr: anchor position
     :return: annotation as dict
     """
-    annotation = dict(showarrow=False, x=xcrd, y=ycrd, z=zcrd, text=txt, xanchor=xancr, font=dict(color='white', size=12))
+    annotation = dict(showarrow=False, x=xcrd, y=ycrd, z=zcrd, text=txt, xanchor=xancr,
+                      font=dict(color='white', size=12))
     return annotation
 
 
@@ -82,30 +84,33 @@ def plot_asteroids(*rocks):
     Plot asteroids in 3d space around Adalia
     :param rocks: indefinite amount of asteroids (as dict)
     """
+    # Init
+    asteroid_spheres = []
+    asteroid_orbits = []
+    marker_size = {'SMALL': 3, 'MEDIUM': 6, 'LARGE': 9, "HUGE": 15, 'SUN': 30}
+    curr_aday = get_current_adalia_day()
+    print(f"Plotting asteroids at day {round(get_current_adalia_day(display_day=True), 2)}...")
+
     # Set up Adalia sphere
-    trace_adalia_sphere = spheres(25, [0, 0, 0], '#bfbfbf')
+    trace_adalia_sphere = spheres(marker_size['SUN'], [0, 0, 0], '#bfbfbf')
+    annotations = [annot(0, 0, 40, 'Adalia')]
 
     # Set up anchors in the corners to keep spheres from deflating
     anchors = create_dimensional_anchors()
 
-    # Init
-    asteroid_spheres = []
-    asteroid_orbits = []
-    annotations = [annot(0, 0, 40, 'Adalia')]
-    curr_aday = get_current_adalia_day()
-    print(f"Plotting asteroids at day {round(get_current_adalia_day(display_day=True), 2)}...")
     # Set up asteroid orbits/spheres
     for rock in rocks:
         # Rock data
         cur_pos = position_at_adalia_day(rock, curr_aday)
         coordinates = full_position(rock)
+        size_category = radius_to_size(rock['r'])
 
         # Set up orbit traces
         trace_rock_orbit = orbits(coordinates)
         asteroid_orbits.append(trace_rock_orbit)
 
         # Create asteroid spheres
-        trace_rock_sphere = spheres(10, cur_pos, '#FFFF00')
+        trace_rock_sphere = spheres(marker_size[size_category], cur_pos, '#FFFF00')
         asteroid_spheres.append(trace_rock_sphere)
 
         # Create annotation
