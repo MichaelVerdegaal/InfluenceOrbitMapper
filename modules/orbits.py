@@ -1,7 +1,7 @@
 import math
 
-import pendulum
 import numpy as np
+import pendulum
 
 START_ORBIT_TIMESTAMP = '2021-01-01T00:00:00+00:00'  # Orbit day zero
 START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The Arrival")
@@ -9,7 +9,7 @@ START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The A
 
 def position_at_adalia_day(rock, adalia_day):
     """
-    Calculates the xyz coordinates of an asteroid at a certain adalia day Direct copy of
+    Calculates the xyz coordinates of an asteroid at a certain adalia day. Direct copy of
     https://github.com/Influenceth/influence-utils/blob/00f6838b616d5c7113720b0f883c2a2d55a41267/index.js#L288
     Translated from JS to Python.
     :param rock: asteroid as dict
@@ -34,7 +34,7 @@ def position_at_adalia_day(rock, adalia_day):
     # Calcualate the mean anomoly at elapsed time
     M = m + (n * adalia_day)
 
-    # Estimate the eccentric and true anomolies using an iterative approximation let E1let E = M let lastDiff = 1
+    # Estimate the eccentric and true anomolies using an iterative approximation
     E = M
     last_diff = 1
 
@@ -61,6 +61,16 @@ def full_position(rock):
     :return: position vectors as numpy array
     """
     return np.array([position_at_adalia_day(rock, day) for day in range(rock['orbital.T'] + 1)])
+
+
+def calculate_orbital_period(a):
+    """
+    Calculate orbital period of asteroid via keplers 3rd law
+    :param a: semi-major axis
+    :return: orbital period
+    """
+    third_law = 0.000007495
+    return int(math.sqrt(pow(a, 3) / third_law))
 
 
 def get_current_adalia_day(display_day=False):

@@ -3,8 +3,8 @@ import itertools
 import numpy as np
 import plotly.graph_objects as go
 
-from modules.orbits import get_current_adalia_day, full_position, position_at_adalia_day
 from modules.asteroids import radius_to_size
+from modules.orbits import get_current_adalia_day, full_position, position_at_adalia_day
 
 AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
@@ -122,13 +122,13 @@ def plot_asteroids(*rocks):
         annotations.append(rock_annotation)
 
     layout = go.Layout(title='Adalia System', showlegend=False, margin=dict(l=0, r=0, t=0, b=0),
-                       scene=dict(xaxis=dict(title='Distance from Sun', titlefont_color='black',
+                       scene=dict(xaxis=dict(title="Distance from Adalia", titlefont_color='black',
                                              range=[-1000, 1000], backgroundcolor='black', color='black',
                                              gridcolor='black'),
-                                  yaxis=dict(title='Distance from Sun', titlefont_color='black',
+                                  yaxis=dict(title="Distance from Adalia", titlefont_color='black',
                                              range=[-1000, 1000], backgroundcolor='black', color='black',
                                              gridcolor='black'),
-                                  zaxis=dict(title='', range=[-1000, 1000], backgroundcolor='black', color='white',
+                                  zaxis=dict(title="", range=[-1000, 1000], backgroundcolor='black', color='white',
                                              gridcolor='black'),
                                   annotations=annotations
                                   )

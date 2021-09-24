@@ -1,7 +1,8 @@
 import json
-from math import sqrt, pow
 
 import pandas as pd
+
+from modules.orbits import calculate_orbital_period
 
 SIZES = ['SMALL', 'MEDIUM', 'LARGE', 'HUGE']
 
@@ -12,50 +13,40 @@ def load_roids(json_file):
     :param json_file: json file path
     :return: dataframe
     """
-
-    def orbital_period(a):
-        """
-        Calculate orbital period of asteroid via keplers 3rd law
-        :param a: semi-major axis
-        :return: orbital period
-        """
-        third_law = 0.000007495
-        return int(sqrt(pow(a, 3) / third_law))
-
     roids = []
     with open(json_file) as f:
         for line in f:
             roids.append(json.loads(line))
 
     roids = pd.json_normalize(roids)  # Flatten nested JSON
-    roids['orbital.T'] = roids.apply(lambda x: orbital_period(x['orbital.a']), axis=1)  # Add orbital period
+    roids['orbital.T'] = roids.apply(lambda x: calculate_orbital_period(x['orbital.a']), axis=1)  # Add orbital period
     return roids
 
 
-def get_roid(roids, id):
+def get_roid(roids, rock_id):
     """
     Get an asteroid by it's ID
     :param roids: asteroid dataframe
-    :param id: id to look up
+    :param rock_id: id to look up
     :return: asteroid as dataframe
     """
-    if 1 <= id <= 250000:
-        return roids[roids['i'] == id].to_dict(orient='records')[0]
+    if 1 <= rock_id <= 250000:
+        return roids[roids['i'] == rock_id].to_dict(orient='records')[0]
     else:
         raise SyntaxWarning("Improper asteroid ID")
 
 
-def radius_to_size(r):
+def radius_to_size(radius):
     """
     Convert asteroid radius to size category
-    :param r: radius
+    :param radius: radius
     :return: category as string
     """
-    if r <= 5000:
+    if radius <= 5000:
         return SIZES[0]
-    elif r <= 20000:
+    elif radius <= 20000:
         return SIZES[1]
-    elif r <= 50000:
+    elif radius <= 50000:
         return SIZES[2]
     else:
         return SIZES[3]
