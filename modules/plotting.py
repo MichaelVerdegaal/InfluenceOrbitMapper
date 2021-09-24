@@ -67,13 +67,13 @@ def annot(xcrd, ycrd, zcrd, txt, xancr='left'):
 def create_dimensional_anchors():
     """
     Sets up traces in the corner of the 3d view, which keeps the spheres from deflating.
-    :return:
+    :return: trace list
     """
     corner_combos = list(itertools.product([1000, -1000], [1000, -1000], [1000, -1000]))
     trace_list = []
-    # for c in corner_combos:
-    #     trace = go.Scatter3d(x=[c[0]], y=[c[1]], z=[c[2]], marker=dict(size=0.01), line=dict(color="#171717"))
-    #     trace_list.append(trace)
+    for c in corner_combos:
+        trace = go.Scatter3d(x=[c[0]], y=[c[1]], z=[c[2]], marker=dict(size=0.01), line=dict(color="#171717"))
+        trace_list.append(trace)
     return trace_list
 
 
