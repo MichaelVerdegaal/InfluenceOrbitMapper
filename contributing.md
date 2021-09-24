@@ -15,3 +15,6 @@
 - Adhere to [PEP-8](https://www.python.org/dev/peps/pep-0008/) wherever Python is written
 - Update requirements.txt if you include a new package 
 - If you do plan to add a new package, make sure that it's absolutely necessary. In case of doubt post an issue.
+- When it comes to single vs double quotes (' and ") for strings, use single quotes as much as possible. Use double 
+quotes for strings meant to be readable to a user, or general long messages. Double quotes is also of course permitted 
+when string escaping is needed.
