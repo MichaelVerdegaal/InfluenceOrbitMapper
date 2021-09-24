@@ -2,6 +2,7 @@
 Everything in this file is experimental for now, and will not reflect the contents of the repository when it is more
 production ready.
 """
+import numpy as np
 
 from modules.asteroids import load_roids, get_roid
 from modules.plotting import plot_asteroids
@@ -11,13 +12,21 @@ print('Booting up...')
 roids = load_roids("asteroids_20210917.json")
 
 # Get rock of choice
-rocks = [
-    get_roid(roids, 1),  # Adalia prime
-    get_roid(roids, 250000),  # Very far away
-    get_roid(roids, 235773),  # Extremely high inclination/eccentricity
-    get_roid(roids, 104),
-    get_roid(roids, 249999)
-]
+print("Please enter up to 10 asteroid numbers. Enter a non-number to continue")
+templates = {'orbit_test': [1, 4148],  # Used to confirm correct orbit calculations via game website comparisons
+             'demo': [1, 250000, 249999, 104, 235773, 13],  # Default asteroid choices
+             'stress_test': np.linspace(1, 50, 50)}  # Stress test
+rocks = []
+while len(rocks) < 9:
+    asteroid_number = input()
+    if asteroid_number.isnumeric() and (0 < int(asteroid_number) <= 250000):
+        rocks.append(get_roid(roids, int(asteroid_number)))
+    elif asteroid_number in templates.keys():
+        rocks = [get_roid(roids, i) for i in templates[asteroid_number]]
+        break
+    else:
+        break
 
-
+if not rocks:
+    rocks = [get_roid(roids, i) for i in templates['demo']]
 plot_asteroids(*rocks)
