@@ -1,7 +1,9 @@
 # InfluencePython
 
-This is a Python script to model asteroids orbits from the Influence game. The long term goal is visualizations for
-multiple orbits and route planning between a selection of asteroids.
+Orbit Mapper is a tool built for the Influence defi game, set in a whole new fictional space system. The tool is meant to assist in visualizing asteroids orbit and their locations, and the ability to plan a route between them with complicated criteria. The tool originated from the need to compare more than 2 asteroids at once, which is not possible in the basegame.
+
+[![Alt text](https://img.youtube.com/vi/YWPaKscGWPM/0.jpg)](https://youtu.be/YWPaKscGWPM)
+
 
 # Requirements
 
@@ -9,4 +11,9 @@ multiple orbits and route planning between a selection of asteroids.
 - Latest .json data export copied to root directory. You can find
   the [direct download link here](https://www.dropbox.com/sh/5g3ww8wi9n0p4s6/AADcR0lgL8iKTQrpiWUC37Oxa?dl=0) or in
   the [influence-utils repo](https://github.com/Influenceth/influence-utils)
-- packages from requirements.txt installed
+- Packages from requirements.txt installed
+
+
+# References
+
+- [influence-utils](https://github.com/Influenceth/influence-utils). A repository with tools made by the main developers of Influence.
