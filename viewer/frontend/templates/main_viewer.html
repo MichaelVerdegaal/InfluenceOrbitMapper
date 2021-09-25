@@ -2,22 +2,39 @@
 
 {% block container %}
     <title>Orbit Mapper</title>
+    <script src="{{ url_for('static', filename='js/asteroid.js') }}"></script>
 
     <div class="container-fluid" id="sidebar-container">
         <div class="row flex-nowrap">
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <div class="col-auto col-md-3 col-xl-3 px-sm-2 px-0 bg-dark">
                 <div class="d-flex flex-column min-vh-100">
-                    <h3>Orbit mapper</h3>
+                    <h3 id="sidebarTitle">Orbit mapper</h3>
                     <br>
 
-                    <p>Select your asteroids</p>
+                    <form>
+                        <label for="asteroidIdInput" class="form-label">Input asteroid ID's</label>
+                        <input type="text" id="asteroidIdInput" class="form-control">
+                        <button class="btn btn-primary" type="button" id="addAsteroidBtn" style="width: 100%">
+                            Add asteroid
+                        </button>
+                    </form>
+
 
                 </div>
             </div>
-            <div class="col py-3">
 
+
+            <div class="col py-3" id="content-container">
+                <p id="filler"></p>
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
+            let urlBase = "{{ url_for('get_asteroid', asteroid_id=1) }}";
+            asteroidGet(urlBase);
+        });
+    </script>
 
 {% endblock %}

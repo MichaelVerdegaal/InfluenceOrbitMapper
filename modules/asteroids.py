@@ -19,6 +19,7 @@ def load_roids(json_file):
             roids.append(json.loads(line))
 
     roids = pd.json_normalize(roids)  # Flatten nested JSON
+    roids = roids.drop(['mintedCrewId', 'rawBonuses', 'scanning', 'purchaseOrder'], axis=1)
     roids['orbital.T'] = roids.apply(lambda x: calculate_orbital_period(x['orbital.a']), axis=1)  # Add orbital period
     return roids
 
