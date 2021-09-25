@@ -116,3 +116,6 @@ dmypy.json
 # Jetbrains
 .idea
 *.json
+
+# Generated css from sass
+*.css
