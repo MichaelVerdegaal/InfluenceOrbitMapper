@@ -28,8 +28,7 @@ def get_asteroids():
     data = request.json
     asteroid_id_list = data['asteroid_id_list']
     asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in asteroid_id_list]
-    c = [a['baseName'] for a in asteroids]
-    return json.dumps(c), 200
+    return json.dumps(asteroids), 200
 
 
 @app.route('/ajax/asteroid/orbit/<int:asteroid_id>')

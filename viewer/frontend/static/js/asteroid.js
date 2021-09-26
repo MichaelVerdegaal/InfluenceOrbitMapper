@@ -7,9 +7,10 @@ function asteroidGet(urlBase) {
     let asteroidIDList = [];
     for (let selection of asteroidIDInputData) {
         let asteroidID = selection.text;
-        asteroidIDList.push(parseInt(asteroidID))
+        if (isInt(asteroidID)) {
+            asteroidIDList.push(parseInt(asteroidID))
+        }
     }
-    console.log(asteroidIDInputData);
 
     postRequest(urlBase, {asteroid_id_list: asteroidIDList})
         .then(isOk)

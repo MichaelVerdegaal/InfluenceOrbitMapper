@@ -14,3 +14,9 @@ function postRequest(url, data) {
 }
 
 
+function isInt(value) {
+    /**
+     * Checks value for being an integer, including strings
+     */
+    return Number.isInteger(value) || Number.isInteger(parseInt(value))
+}
