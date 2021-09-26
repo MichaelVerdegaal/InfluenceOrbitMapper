@@ -8,16 +8,18 @@
         <div class="row flex-nowrap">
             <div class="col-auto col-md-3 col-xl-3 px-sm-2 px-0 bg-dark">
                 <div class="d-flex flex-column min-vh-100">
+                    <!-- Starting from here, enter sidebar content -->
                     <h3 id="sidebarTitle">Orbit mapper</h3>
                     <br>
 
-                    <form>
+                    <div class="container-fluid sidebarInputGroup">
                         <label for="asteroidIdInput" class="form-label">Input asteroid ID's</label>
-                        <input type="text" id="asteroidIdInput" class="form-control">
-                        <button class="btn btn-primary" type="button" id="addAsteroidBtn" style="width: 100%">
+                        <select class="js-example-basic-multiple sidebarInput" id="asteroidIdInput"
+                                multiple="multiple"></select>
+                        <button class="btn btn-primary sidebarBtn" type="button" id="addAsteroidBtn">
                             Add asteroid
                         </button>
-                    </form>
+                    </div>
 
 
                 </div>
@@ -25,6 +27,7 @@
 
 
             <div class="col py-3" id="content-container">
+                <!-- Starting from here, enter content -->
                 <p id="filler"></p>
             </div>
         </div>
@@ -32,9 +35,17 @@
 
     <script>
         document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
-            let urlBase = "{{ url_for('get_asteroid', asteroid_id=1) }}";
+            let urlBase = "{{ url_for('get_asteroids') }}";
             asteroidGet(urlBase);
         });
+
+        $("#asteroidIdInput").select2({
+            theme: "bootstrap-5",
+            containerCssClass: "select2--small", // For Select2 v4.0
+            width: 'resolve',
+            tags: true,
+            tokenSeparators: [',', ' ']
+        })
     </script>
 
 {% endblock %}

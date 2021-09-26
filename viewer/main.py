@@ -1,13 +1,13 @@
 import json
 
-from flask import render_template, abort
+from flask import render_template, abort, request
 from jinja2 import TemplateNotFound
 
 from modules.asteroids import get_roid, load_roids
 from modules.orbits import full_position, position_at_adalia_day, get_current_adalia_day
 from viewer import create_app
 
-asteroids = load_roids('asteroids_20210917.json')
+asteroids_df = load_roids('asteroids_20210917.json')
 app = create_app()  # Flask app set up like this to enable easy hosting
 
 
@@ -19,15 +19,17 @@ def home():
         abort(404)
 
 
-@app.route('/ajax/asteroid/<int:asteroid_id>')
-def get_asteroid(asteroid_id):
+@app.route('/ajax/asteroid', methods=['POST'])
+def get_asteroids():
     """
-    AJAX endpoint to retrieve an asteroid
-    :param asteroid_id: asteroid id
-    :return: asteroid as dict, status code
+    AJAX endpoint to retrieve a list of asteroids
+    :return: asteroids as dict, status code
     """
-    asteroid = get_roid(asteroids, asteroid_id)
-    return json.dumps(asteroid), 200
+    data = request.json
+    asteroid_id_list = data['asteroid_id_list']
+    asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in asteroid_id_list]
+    c = [a['baseName'] for a in asteroids]
+    return json.dumps(c), 200
 
 
 @app.route('/ajax/asteroid/orbit/<int:asteroid_id>')
@@ -37,7 +39,7 @@ def get_asteroid_orbit(asteroid_id):
     :param asteroid_id: asteroid id
     :return: asteroid orbit as nested list, status code
     """
-    asteroid = get_roid(asteroids, asteroid_id)
+    asteroid = get_roid(asteroids_df, asteroid_id)
     orbit = full_position(asteroid)
     orbit = [list(pos) for pos in orbit]
     return json.dumps(orbit), 200
@@ -50,7 +52,7 @@ def get_asteroid_current_location(asteroid_id):
     :param asteroid_id: asteroid id
     :return: asteroid location as list, status code
     """
-    asteroid = get_roid(asteroids, asteroid_id)
+    asteroid = get_roid(asteroids_df, asteroid_id)
     curr_aday = get_current_adalia_day()
     pos = position_at_adalia_day(asteroid, curr_aday)
     return json.dumps(list(pos)), 200
@@ -64,4 +66,3 @@ def get_adalia_day():
     """
     curr_aday = get_current_adalia_day()
     return json.dumps({'day': curr_aday}), 200
-

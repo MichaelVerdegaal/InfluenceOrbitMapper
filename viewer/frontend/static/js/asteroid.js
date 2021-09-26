@@ -3,16 +3,21 @@ function asteroidGet(urlBase) {
      * Retrieves an asteroid
      * @param {String} urlBase - endpoint to send request to
      */
-    let asteroidID = document.querySelector('#asteroidIdInput').value;
-    let requestUrl = urlBase.slice(0, -1) + asteroidID;
+    let asteroidIDInputData = $('#asteroidIdInput').select2('data');
+    let asteroidIDList = [];
+    for (let selection of asteroidIDInputData) {
+        let asteroidID = selection.text;
+        asteroidIDList.push(parseInt(asteroidID))
+    }
+    console.log(asteroidIDInputData);
 
-    fetch(requestUrl)
+    postRequest(urlBase, {asteroid_id_list: asteroidIDList})
         .then(isOk)
         .then(data => {
             document.querySelector('#filler').textContent = JSON.stringify(data);
         })
         .catch(error => {
             console.log(error);
-            alert("Rock not found");
+            alert("Rocks not found");
         });
 }
