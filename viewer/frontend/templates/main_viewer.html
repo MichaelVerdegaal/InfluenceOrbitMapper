@@ -4,48 +4,113 @@
     <title>Orbit Mapper</title>
     <script src="{{ url_for('static', filename='js/asteroid.js') }}"></script>
 
-    <div class="container-fluid" id="sidebar-container">
+    <div class="container-fluid" id="content-container">
         <div class="row flex-nowrap">
-            <div class="col-auto col-md-3 col-xl-3 px-sm-2 px-0 bg-dark">
+            <!-- Sidebar content -->
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
                 <div class="d-flex flex-column min-vh-100">
-                    <!-- Starting from here, enter sidebar content -->
-                    <h3 id="sidebarTitle">Orbit mapper</h3>
-                    <br>
+                    <h3 class="sidebarTitle">Orbit mapper</h3>
+                    <hr>
 
                     <div class="container-fluid sidebarInputGroup">
-                        <label for="asteroidIdInput" class="form-label">Input asteroid ID's</label>
-                        <select class="js-example-basic-multiple sidebarInput" id="asteroidIdInput"
+                        <label for="asteroidStartInput" class="form-label">Starting asteroid</label>
+                        <select class="js-example-basic-multiple sidebarInput" id="asteroidStartInput"
                                 multiple="multiple"></select>
-                        <button class="btn btn-primary sidebarBtn" type="button" id="addAsteroidBtn">
-                            Add asteroid
-                        </button>
                     </div>
 
+                    <div class="container-fluid sidebarInputGroup">
+                        <label for="asteroidTargetInput" class="form-label">Target asteroids</label>
+                        <select class="js-example-basic-multiple sidebarInput" id="asteroidTargetInput"
+                                multiple="multiple"></select>
+
+                    </div>
+
+                    <div class="container-fluid sidebarInputGroup">
+                        <label for="asteroidTargetInput" class="form-label">Select heuristic used to calculate
+                            route</label>
+                        <select class="js-example-basic-single sidebarInput" name="state" id="heuristicInput">
+                            <option value="distance">Closest target</option>
+                        </select>
+                    </div>
+
+                    <hr>
+                    <div class="container-fluid sidebarInputGroup">
+                        <button class="btn btn-primary sidebarBtn" type="button" id="addAsteroidBtn">
+                            Calculate route
+                        </button>
+                    </div>
 
                 </div>
             </div>
 
-
-            <div class="col py-3" id="content-container">
-                <!-- Starting from here, enter content -->
+            <!-- 3D view content -->
+            <div class="col py-3" id="view-container">
                 <p id="filler"></p>
             </div>
+
+            <!-- Details content -->
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                <h3 class="sidebarTitle">Route details</h3>
+                <hr>
+
+                <div class="container-fluid sidebarInputGroup">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">From X to Y</h5>
+                            <ul class="list-group list-group-flush card-list">
+                                <li class="list-group-item">
+                                    <p class="card-text">2 hours, 5 minutes</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">100 million kilometer</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">Fuel based heuristic</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">104 --> 13 --> 1 --> 44</p>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Calculated at 26-9-2021 21:11</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <script>
-        document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
-            let urlBase = "{{ url_for('get_asteroids') }}";
-            asteroidGet(urlBase);
-        });
+        <script>
+            $(document).ready(function () {
+                document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
+                    let urlBase = "{{ url_for('get_asteroids') }}";
+                    asteroidGet(urlBase);
+                });
 
-        $("#asteroidIdInput").select2({
-            theme: "bootstrap-5",
-            containerCssClass: "select2--small", // For Select2 v4.0
-            width: 'style',
-            tags: true,
-            tokenSeparators: [',', ' ']
-        })
-    </script>
+                $("#asteroidStartInput").select2({
+                    placeholder: "Enter asteroid ID",
+                    theme: "bootstrap-5",
+                    containerCssClass: "select2--small", // For Select2 v4.0
+                    width: 'style',
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                });
+
+                $("#asteroidTargetInput").select2({
+                    placeholder: "Enter asteroid ID",
+                    theme: "bootstrap-5",
+                    containerCssClass: "select2--small", // For Select2 v4.0
+                    width: 'style',
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                });
+
+
+                $('#heuristicInput').select2({
+                    minimumResultsForSearch: Infinity
+                });
+            });
+        </script>
 
 {% endblock %}
