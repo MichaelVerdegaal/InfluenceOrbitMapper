@@ -5,6 +5,7 @@ import pendulum
 
 START_ORBIT_TIMESTAMP = '2021-01-01T00:00:00+00:00'  # Orbit day zero
 START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The Arrival")
+AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
 
 
 def position_at_adalia_day(rock, adalia_day):
@@ -51,7 +52,7 @@ def position_at_adalia_day(rock, adalia_day):
     x = r * (math.cos(o) * math.cos(v + p - o) - (math.sin(o) * math.sin(v + p - o) * math.cos(i)))
     y = r * (math.sin(o) * math.cos(v + p - o) + math.cos(o) * math.sin(v + p - o) * math.cos(i))
     z = r * math.sin(v + p - o) * math.sin(i)
-    return np.array([x, y, z])
+    return (np.array([x, y, z]) * AU_MULTIPLIER).tolist()
 
 
 def get_current_position(rock):
@@ -70,7 +71,7 @@ def full_position(rock):
     :param rock: asteroid as dict
     :return: position vectors as numpy array
     """
-    return np.array([position_at_adalia_day(rock, day) for day in range(rock['orbital.T'] + 1)])
+    return [position_at_adalia_day(rock, day) for day in range(rock['orbital.T'] + 1)]
 
 
 def calculate_orbital_period(a):

@@ -5,8 +5,6 @@ from jinja2 import TemplateNotFound
 
 from modules.asteroids import get_roid, load_roids
 from modules.orbits import full_position, position_at_adalia_day, get_current_adalia_day, get_current_position
-from modules.pathfinding import calculate_routes
-from modules.plotting import AU_MULTIPLIER
 from viewer import create_app
 
 asteroids_df = load_roids('asteroids_20210917.json')
@@ -31,12 +29,13 @@ def get_routes_calculated():
 
     response = {
         'starting_orbits': [{'id': rock['i'],
-                             'pos': (get_current_position(rock) * AU_MULTIPLIER).tolist(),
-                             'orbit': (full_position(rock) * AU_MULTIPLIER).tolist()} for rock in start_asteroids],
+                             'pos': get_current_position(rock),
+                             'orbit': full_position(rock)} for rock in start_asteroids],
         'target_orbits': [{'id': rock['i'],
-                           'pos': (get_current_position(rock) * AU_MULTIPLIER).tolist(),
-                           'orbit': (full_position(rock) * AU_MULTIPLIER).tolist()} for rock in end_asteroids],
+                           'pos': get_current_position(rock),
+                           'orbit': full_position(rock)} for rock in end_asteroids],
     }
+    print(response)
     return json.dumps(response), 200
 
 
@@ -61,7 +60,6 @@ def get_asteroid_orbit(asteroid_id):
     """
     asteroid = get_roid(asteroids_df, asteroid_id)
     orbit = full_position(asteroid)
-    orbit = [list(pos) for pos in orbit]
     return json.dumps(orbit), 200
 
 
@@ -75,7 +73,7 @@ def get_asteroid_current_location(asteroid_id):
     asteroid = get_roid(asteroids_df, asteroid_id)
     curr_aday = get_current_adalia_day()
     pos = position_at_adalia_day(asteroid, curr_aday)
-    return json.dumps(list(pos)), 200
+    return json.dumps(pos), 200
 
 
 @app.route('/ajax/datetime/adalia/current')

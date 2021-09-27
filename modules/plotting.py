@@ -6,8 +6,6 @@ import plotly.graph_objects as go
 from modules.asteroids import radius_to_size
 from modules.orbits import get_current_adalia_day, full_position, position_at_adalia_day
 
-AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
-
 
 def spheres(size, pos, clr):
     """
@@ -18,7 +16,7 @@ def spheres(size, pos, clr):
     :return: trace
     """
     # xyz position of asteroid
-    x, y, z = pos[0] * AU_MULTIPLIER, pos[1] * AU_MULTIPLIER, pos[2] * AU_MULTIPLIER
+    x, y, z = pos[0], pos[1], pos[2]
 
     # Set up 100 points. First, do angles
     theta = np.linspace(0, 2 * np.pi, 100)
@@ -44,9 +42,10 @@ def orbits(coordinates, clr='white', wdth=2):
     :param wdth: width of trace
     :return: plotly trace
     """
-    xcrd = coordinates[::, 0] * AU_MULTIPLIER
-    ycrd = coordinates[::, 1] * AU_MULTIPLIER
-    zcrd = coordinates[::, 2] * AU_MULTIPLIER
+    coordinates = np.array(coordinates)
+    xcrd = coordinates[::, 0]
+    ycrd = coordinates[::, 1]
+    zcrd = coordinates[::, 2]
     trace = go.Scatter3d(x=xcrd, y=ycrd, z=zcrd, marker=dict(size=0.1), line=dict(color=clr, width=wdth))
     return trace
 
@@ -120,9 +119,9 @@ def plot_asteroids(*rocks):
 
         # Create annotation
         rock_name = rock['customName'] if str(rock['customName']) != 'nan' else rock['baseName']
-        rock_annotation = annot(cur_pos[0] * AU_MULTIPLIER,
-                                cur_pos[1] * AU_MULTIPLIER,
-                                (cur_pos[2] * AU_MULTIPLIER) + 20,
+        rock_annotation = annot(cur_pos[0],
+                                cur_pos[1],
+                                cur_pos[2] + 20,
                                 rock_name)
         annotations.append(rock_annotation)
 
