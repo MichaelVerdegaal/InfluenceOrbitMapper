@@ -2,7 +2,10 @@
 
 {% block container %}
     <title>Orbit Mapper</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.4.2.min.js"></script>
     <script src="{{ url_for('static', filename='js/asteroid.js') }}"></script>
+
 
     <div class="container-fluid" id="content-container">
         <div class="row flex-nowrap">
@@ -45,7 +48,7 @@
 
             <!-- 3D view content -->
             <div class="col py-3" id="view-container">
-                <p id="filler"></p>
+                <div id="view"></div>
             </div>
 
             <!-- Details content -->
@@ -84,7 +87,7 @@
         <script>
             $(document).ready(function () {
                 document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
-                    let urlBase = "{{ url_for('get_asteroids') }}";
+                    let urlBase = "{{ url_for('get_routes_calculated') }}";
                     asteroidGet(urlBase);
                 });
 
@@ -108,6 +111,9 @@
 
 
                 $('#heuristicInput').select2({
+                    width: 'style',
+                    theme: "bootstrap-5",
+                    containerCssClass: "select2--small", // For Select2 v4.0
                     minimumResultsForSearch: Infinity
                 });
             });

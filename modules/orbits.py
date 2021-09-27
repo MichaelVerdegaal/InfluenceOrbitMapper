@@ -54,6 +54,16 @@ def position_at_adalia_day(rock, adalia_day):
     return np.array([x, y, z])
 
 
+def get_current_position(rock):
+    """
+    Get the current position of an asteroid
+    :param rock: asteroid as dict
+    :return: xyz position as numpy array
+    """
+    curr_aday = get_current_adalia_day()
+    return position_at_adalia_day(rock, curr_aday)
+
+
 def full_position(rock):
     """
     Calculate positions vectors for the entire orbit of an asteroid

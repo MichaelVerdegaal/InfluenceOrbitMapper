@@ -4,7 +4,9 @@ from flask import render_template, abort, request
 from jinja2 import TemplateNotFound
 
 from modules.asteroids import get_roid, load_roids
-from modules.orbits import full_position, position_at_adalia_day, get_current_adalia_day
+from modules.orbits import full_position, position_at_adalia_day, get_current_adalia_day, get_current_position
+from modules.pathfinding import calculate_routes
+from modules.plotting import AU_MULTIPLIER
 from viewer import create_app
 
 asteroids_df = load_roids('asteroids_20210917.json')
@@ -17,6 +19,25 @@ def home():
         return render_template("main_viewer.html")
     except TemplateNotFound:
         abort(404)
+
+
+@app.route('/ajax/route', methods=['POST'])
+def get_routes_calculated():
+    data = request.json
+    start_asteroids = data['start_asteroids']
+    end_asteroids = data['target_asteroids']
+    start_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in start_asteroids]
+    end_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in end_asteroids]
+
+    response = {
+        'starting_orbits': [{'id': rock['i'],
+                             'pos': (get_current_position(rock) * AU_MULTIPLIER).tolist(),
+                             'orbit': (full_position(rock) * AU_MULTIPLIER).tolist()} for rock in start_asteroids],
+        'target_orbits': [{'id': rock['i'],
+                           'pos': (get_current_position(rock) * AU_MULTIPLIER).tolist(),
+                           'orbit': (full_position(rock) * AU_MULTIPLIER).tolist()} for rock in end_asteroids],
+    }
+    return json.dumps(response), 200
 
 
 @app.route('/ajax/asteroid', methods=['POST'])

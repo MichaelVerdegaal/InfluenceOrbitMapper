@@ -79,6 +79,11 @@ def create_dimensional_anchors():
     return trace_list
 
 
+def fig_to_iframe():
+    frame = '<iframe id="igraph" style="border:none;" src="www.google.com" height="800" width="400"></iframe>"'
+    return frame
+
+
 def plot_asteroids(*rocks):
     """
     Plot asteroids in 3d space around Adalia
