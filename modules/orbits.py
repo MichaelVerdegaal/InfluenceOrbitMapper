@@ -5,7 +5,8 @@ import pendulum
 
 START_ORBIT_TIMESTAMP = '2021-01-01T00:00:00+00:00'  # Orbit day zero
 START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The Arrival")
-AU_MULTIPLIER = 150.18  # Astronomical Unit. 150.18 million kilometer.
+# Astronomical Unit multiplier. 1 point = 1 million kilometer. Used to arrive at correct xyz pos.
+AU_MULTIPLIER = 149.597871
 
 
 def position_at_adalia_day(rock, adalia_day):

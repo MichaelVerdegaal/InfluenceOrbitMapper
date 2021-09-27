@@ -35,7 +35,6 @@ def get_routes_calculated():
                            'pos': get_current_position(rock),
                            'orbit': full_position(rock)} for rock in end_asteroids],
     }
-    print(response)
     return json.dumps(response), 200
 
 
