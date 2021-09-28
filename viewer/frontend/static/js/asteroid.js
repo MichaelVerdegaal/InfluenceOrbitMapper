@@ -1,3 +1,43 @@
+let view_layout = {
+    plot_bgcolor: "rgb(13,13,13)",
+    paper_bgcolor: "rgb(13,13,13)",
+    'height': '100vh',
+    title: '3D orbits',
+    autosize: true,
+    showlegend: false,
+    margin: {
+        l: 0,
+        r: 0,
+        b: 0,
+        t: 0
+    },
+    scene: {
+        xaxis: {
+            title: 'Distance X',
+            titlefont_color: '#0a0a0a',
+            range: [-1000, 1000],
+            backgroundcolor: '#0a0a0a',
+            color: 'white',
+            gridcolor: '#0a0a0a'
+        },
+        yaxis: {
+            title: 'Distance Y',
+            titlefont_color: '#0a0a0a',
+            range: [-1000, 1000],
+            backgroundcolor: '#0a0a0a',
+            color: 'white',
+            gridcolor: '#0a0a0a'
+        },
+        zaxis: {
+            title: 'Distance Z',
+            range: [-1000, 1000],
+            backgroundcolor: '#0a0a0a',
+            color: 'white',
+            gridcolor: '#0a0a0a'
+        }
+    }
+};
+
 function asteroidGet(urlBase) {
     /**
      * Retrieves an asteroid
@@ -27,43 +67,6 @@ function asteroidGet(urlBase) {
             console.log(response);
             let sorbet = response['starting_orbits'][0]['orbit']
 
-
-            let layout = {
-                title: '3D orbits',
-                autosize: true,
-                showlegend: false,
-                margin: {
-                    l: 0,
-                    r: 0,
-                    b: 0,
-                    t: 0
-                },
-                scene: {
-                    xaxis: {
-                        title: 'Distance X',
-                        titlefont_color: 'black',
-                        range: [-1000, 1000],
-                        backgroundcolor: 'black',
-                        color: 'black',
-                        gridcolor: 'black'
-                    },
-                    yaxis: {
-                        title: 'Distance Y',
-                        titlefont_color: 'black',
-                        range: [-1000, 1000],
-                        backgroundcolor: 'black',
-                        color: 'black',
-                        gridcolor: 'black'
-                    },
-                    zaxis: {
-                        range: [-1000, 1000],
-                        backgroundcolor: 'black',
-                        color: 'white',
-                        gridcolor: 'black'
-                    }
-                }
-            };
-
             let data = [
                 {
                     x: sorbet.map(function (value, index) {
@@ -77,20 +80,18 @@ function asteroidGet(urlBase) {
                     }),
                     mode: 'markers',
                     marker: {
-                        size: 0.1,
+                        size: 0.3,
                         line: {
-                            color: 'rgb(0,0,0)',
-                            width: 2
+                            color: 'white',
+                            width: 5
                         },
-                        opacity: 0.5
                     },
                     type: 'scatter3d'
                 }
             ]
 
-
-            Plotly.newPlot('view', data, layout);
-
+            Plotly.newPlot('view', data, view_layout, {'responsive': true});
+            window.dispatchEvent(new Event('resize')); // Plotly graph doesn't fill screen until window resize
         })
         .catch(error => {
             console.log(error);
