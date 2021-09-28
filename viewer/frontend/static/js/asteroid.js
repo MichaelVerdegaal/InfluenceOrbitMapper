@@ -38,6 +38,20 @@ let view_layout = {
     }
 };
 
+function asteroidIDList(asteroidInputs) {
+    /**
+     * Parses inputs from the pillbox to integers
+     * @param asteroidInputs - Select2 values
+     */
+    let idList = [];
+    for (let selection of asteroidInputs) {
+        let asteroidID = selection.text;
+        if (isInt(asteroidID)) {
+            idList.push(parseInt(asteroidID))
+        }
+    }
+    return idList
+}
 
 function orbitTrace(fullPosition) {
     /**
@@ -75,37 +89,25 @@ function asteroidGet(urlBase) {
     let startingAsteroids = $('#asteroidStartInput').select2('data');
     let targetAsteroids = $('#asteroidTargetInput').select2('data');
 
-    let startAsteroidIDList = [];
-    let endAsteroidIDList = [];
-    for (let selection of startingAsteroids) {
-        let asteroidID = selection.text;
-        if (isInt(asteroidID)) {
-            startAsteroidIDList.push(parseInt(asteroidID))
-        }
-    }
-    for (let selection of targetAsteroids) {
-        let asteroidID = selection.text;
-        if (isInt(asteroidID)) {
-            endAsteroidIDList.push(parseInt(asteroidID))
-        }
-    }
+    let startAsteroidIDList = asteroidIDList(startingAsteroids);
+    let targetAsteroidIDList = asteroidIDList(targetAsteroids);
 
-    postRequest(urlBase, {start_asteroids: startAsteroidIDList, target_asteroids: endAsteroidIDList})
+    postRequest(urlBase, {start_asteroids: startAsteroidIDList, target_asteroids: targetAsteroidIDList})
         .then(isOk)
         .then(response => {
             let startingOrbits = response['starting_orbits'];
             let targetOrbits = response['target_orbits'];
-            let data = []
+            let traces = []
 
             for (let orbit of startingOrbits) {
-                data.push(orbitTrace(orbit['orbit']));
+                traces.push(orbitTrace(orbit['orbit']));
             }
             for (let orbit of targetOrbits) {
-                data.push(orbitTrace(orbit['orbit']));
+                traces.push(orbitTrace(orbit['orbit']));
             }
 
 
-            Plotly.newPlot('view', data, view_layout, {'responsive': true});
+            Plotly.newPlot('view', traces, view_layout, {'responsive': true});
             window.dispatchEvent(new Event('resize')); // Plotly graph doesn't fill screen until window resize
         })
         .catch(error => {
