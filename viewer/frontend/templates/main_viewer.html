@@ -88,7 +88,7 @@
             $(document).ready(function () {
                 document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
                     let urlBase = "{{ url_for('get_routes_calculated') }}";
-                    asteroidGet(urlBase);
+                    createAsteroidViewer(urlBase);
                 });
 
                 $("#asteroidStartInput").select2({

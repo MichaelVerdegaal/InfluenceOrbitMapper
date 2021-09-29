@@ -20,3 +20,27 @@ function isInt(value) {
      */
     return Number.isInteger(value) || Number.isInteger(parseInt(value))
 }
+
+function makeInterval(startValue, stopValue, numPoints) {
+    let arr = [];
+    let step = (stopValue - startValue) / (numPoints - 1);
+    for (let i = 0; i < numPoints; i++) {
+        arr.push(startValue + (step * i));
+    }
+    return arr;
+}
+
+
+function outer(a1, a2) {
+    let outerArray = [];
+    for (let i = 0; i < a1.length; i++) {
+        let innerArray = []
+        for (let j = 0; j < a2.length; j++) {
+            innerArray.push(a1[i] * a2[j])
+        }
+        outerArray.push(innerArray)
+    }
+    return outerArray
+}
+
+const deepMap=(input,callback)=>input.map(entry=>entry.map?deepMap(entry,callback):callback(entry))

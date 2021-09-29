@@ -81,7 +81,29 @@ function orbitTrace(fullPosition) {
 }
 
 
-function asteroidGet(urlBase) {
+function sphereTrace(size, pos, clr) {
+    const theta = makeInterval(0, 2 * Math.PI, 100);
+    const phi = makeInterval(0, Math.PI, 100);
+
+    let xProduct =  outer(theta.map(x => Math.cos(x)), phi.map(x => Math.sin(x)));
+    let x0 = deepMap(xProduct, x => x * size + pos[0])
+    let yProduct = outer(theta.map(x => Math.sin(x)), phi.map(x => Math.sin(x)))
+    let y0 = deepMap(yProduct, x => x * size + pos[1])
+    let zProduct = outer(new Array(100).fill(1), phi.map(x => Math.cos(x)))
+    let z0 = deepMap(zProduct, x => x * size + pos[2])
+
+    return {
+        z: z0,
+        y: y0,
+        x: x0,
+        colorscale: [[0, clr], [1, clr]],
+        showscale: false,
+        type: 'surface'
+    }
+}
+
+
+function createAsteroidViewer(urlBase) {
     /**
      * Retrieves an asteroid
      * @param {String} urlBase - endpoint to send request to
@@ -105,7 +127,10 @@ function asteroidGet(urlBase) {
             for (let orbit of targetOrbits) {
                 traces.push(orbitTrace(orbit['orbit']));
             }
-
+            for (let orbit of startingOrbits) {
+                let sphere = sphereTrace(20, orbit['pos'], '#bfbfbf');
+                traces.push(sphere)
+            }
 
             Plotly.newPlot('view', traces, view_layout, {'responsive': true});
             window.dispatchEvent(new Event('resize')); // Plotly graph doesn't fill screen until window resize
