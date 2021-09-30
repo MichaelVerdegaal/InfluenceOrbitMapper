@@ -80,7 +80,6 @@ function orbitTrace(fullPosition) {
     }
 }
 
-
 function sphereTrace(size, pos, clr) {
     /**
      * Creates a sphere at a set xyz coordinate by creating new points around it
@@ -105,7 +104,6 @@ function sphereTrace(size, pos, clr) {
     }
 }
 
-
 function createDimensionalAnchors() {
     /**
      * Set fixed points in the view corners to stop spheres from deflating
@@ -117,7 +115,7 @@ function createDimensionalAnchors() {
                 x: [c[0]],
                 y: [c[1]],
                 z: [c[2]],
-            	mode: 'markers',
+                mode: 'markers',
                 marker: {
                     size: 0.001,
                     line: {
@@ -131,7 +129,33 @@ function createDimensionalAnchors() {
     return traceList
 }
 
-function createTraces(startingOrbits, targetOrbits) {
+function annot(pos, name) {
+    return {
+        showarrow: false,
+        x: pos[0],
+        y: pos[1],
+        z: pos[2] + 20,
+        text: name,
+        xanchor: 5,
+        font: {
+            color: 'white',
+            size: 12
+        }
+    }
+}
+
+function createAnnotations(startingOrbits, targetOrbits) {
+    let annotationList = [];
+    annotationList.push(annot([0,0,10], 'Adalia'))
+    for (const asteroid of startingOrbits.concat(targetOrbits)) {
+        let pos = asteroid['pos'];
+        annotationList.push(annot(pos, asteroid['name']))
+    }
+    console.log(annotationList);
+    return annotationList;
+}
+
+function createTraces(startingAsteroids, targetAsteroids) {
     /**
      * Master function to create traces for the 3d view
      */
@@ -146,11 +170,11 @@ function createTraces(startingOrbits, targetOrbits) {
     // Adalia Prime
     traces.push(sphereTrace(marker_size.SUN, [0, 0, 0], '#eaeaea'));
 
-    for (let orbit of startingOrbits) {
+    for (let orbit of startingAsteroids) {
         traces.push(orbitTrace(orbit['orbit']));
         traces.push(sphereTrace(marker_size[orbit['size']], orbit['pos'], '#56a3f2'));
     }
-    for (let orbit of targetOrbits) {
+    for (let orbit of targetAsteroids) {
         traces.push(orbitTrace(orbit['orbit']));
         traces.push(sphereTrace(marker_size[orbit['size']], orbit['pos'], '#4fff7b'));
     }
@@ -172,9 +196,10 @@ function createAsteroidViewer(urlBase) {
     postRequest(urlBase, {start_asteroids: startAsteroidIDList, target_asteroids: targetAsteroidIDList})
         .then(isOk)
         .then(response => {
-            let startingOrbits = response['starting_asteroids'];
-            let targetOrbits = response['target_asteroids'];
-            let traces = createTraces(startingOrbits, targetOrbits)
+            let startingAsteroids = response['starting_asteroids'];
+            let targetAsteroids = response['target_asteroids'];
+            let traces = createTraces(startingAsteroids, targetAsteroids)
+            view_layout['scene']['annotations'] = createAnnotations(startingAsteroids, targetAsteroids);
 
             Plotly.newPlot('view', traces, view_layout, {'responsive': true});
             window.dispatchEvent(new Event('resize')); // Plotly graph doesn't fill screen until window resize

@@ -26,14 +26,16 @@ def get_routes_calculated():
     end_asteroids = data['target_asteroids']
     start_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in start_asteroids]
     end_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in end_asteroids]
-
+    print(end_asteroids)
     response = {
         'starting_asteroids': [{'id': rock['i'],
                                 'size': radius_to_size(rock['r']),
+                                'name': rock['customName'] if rock['customName'] else rock['baseName'],
                                 'pos': get_current_position(rock),
                                 'orbit': full_position(rock)} for rock in start_asteroids],
         'target_asteroids': [{'id': rock['i'],
                               'size': radius_to_size(rock['r']),
+                              'name': rock['customName'] if rock['customName'] else rock['baseName'],
                               'pos': get_current_position(rock),
                               'orbit': full_position(rock)} for rock in end_asteroids],
     }
