@@ -53,5 +53,12 @@ function outer(a1, a2) {
 
 /**
  * Applies a function to a nested array
+ * Ref: https://stackoverflow.com/a/58223155/7174982
  */
 const deepMap = (input, callback) => input.map(entry => entry.map ? deepMap(entry, callback) : callback(entry))
+
+/**
+ * Cartesian product of multiple arrays
+ * Ref: https://stackoverflow.com/a/43053803/7174982
+ */
+const cartesian =(...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
