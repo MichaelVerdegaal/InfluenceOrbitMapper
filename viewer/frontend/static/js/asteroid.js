@@ -134,7 +134,7 @@ function annot(pos, name) {
         showarrow: false,
         x: pos[0],
         y: pos[1],
-        z: pos[2] + 20,
+        z: pos[2] + 30,
         text: name,
         xanchor: 5,
         font: {
