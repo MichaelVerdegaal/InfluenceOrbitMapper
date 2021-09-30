@@ -82,10 +82,13 @@ function orbitTrace(fullPosition) {
 
 
 function sphereTrace(size, pos, clr) {
+    /**
+     * Creates a sphere at a set xyz coordinate by creating new points around it
+     */
     const theta = makeInterval(0, 2 * Math.PI, 100);
     const phi = makeInterval(0, Math.PI, 100);
 
-    let xProduct =  outer(theta.map(x => Math.cos(x)), phi.map(x => Math.sin(x)));
+    let xProduct = outer(theta.map(x => Math.cos(x)), phi.map(x => Math.sin(x)));
     let x0 = deepMap(xProduct, x => x * size + pos[0])
     let yProduct = outer(theta.map(x => Math.sin(x)), phi.map(x => Math.sin(x)))
     let y0 = deepMap(yProduct, x => x * size + pos[1])

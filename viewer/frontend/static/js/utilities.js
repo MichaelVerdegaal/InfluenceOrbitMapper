@@ -22,6 +22,9 @@ function isInt(value) {
 }
 
 function makeInterval(startValue, stopValue, numPoints) {
+    /**
+     * Generates a list between 2 ranges, with a predetermined amount of points.
+     */
     let arr = [];
     let step = (stopValue - startValue) / (numPoints - 1);
     for (let i = 0; i < numPoints; i++) {
@@ -32,6 +35,10 @@ function makeInterval(startValue, stopValue, numPoints) {
 
 
 function outer(a1, a2) {
+    /**
+     * Computes the outer product of 2 vectors to generate a matrix
+     * Ref: https://numpy.org/doc/stable/reference/generated/numpy.outer.html
+     */
     let outerArray = [];
     for (let i = 0; i < a1.length; i++) {
         let innerArray = []
@@ -43,4 +50,8 @@ function outer(a1, a2) {
     return outerArray
 }
 
-const deepMap=(input,callback)=>input.map(entry=>entry.map?deepMap(entry,callback):callback(entry))
+
+/**
+ * Applies a function to a nested array
+ */
+const deepMap = (input, callback) => input.map(entry => entry.map ? deepMap(entry, callback) : callback(entry))
