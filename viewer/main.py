@@ -23,10 +23,10 @@ def home():
 def get_routes_calculated():
     data = request.json
     start_asteroids = data['start_asteroids']
-    end_asteroids = data['target_asteroids']
+    target_asteroids = data['target_asteroids']
     start_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in start_asteroids]
-    end_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in end_asteroids]
-    print(end_asteroids)
+    target_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in target_asteroids]
+
     response = {
         'starting_asteroids': [{'id': rock['i'],
                                 'size': radius_to_size(rock['r']),
@@ -37,7 +37,7 @@ def get_routes_calculated():
                               'size': radius_to_size(rock['r']),
                               'name': rock['customName'] if rock['customName'] else rock['baseName'],
                               'pos': get_current_position(rock),
-                              'orbit': full_position(rock)} for rock in end_asteroids],
+                              'orbit': full_position(rock)} for rock in target_asteroids],
     }
     return json.dumps(response), 200
 
