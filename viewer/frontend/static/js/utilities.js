@@ -18,7 +18,7 @@ function isInt(value) {
     /**
      * Checks value for being an integer, including strings
      */
-    return Number.isInteger(value) || Number.isInteger(parseInt(value))
+    return Number.isInteger(value) || Number.isInteger(parseInt(value));
 }
 
 function makeInterval(startValue, stopValue, numPoints) {
@@ -41,13 +41,13 @@ function outer(a1, a2) {
      */
     let outerArray = [];
     for (let i = 0; i < a1.length; i++) {
-        let innerArray = []
+        let innerArray = [];
         for (let j = 0; j < a2.length; j++) {
-            innerArray.push(a1[i] * a2[j])
+            innerArray.push(a1[i] * a2[j]);
         }
-        outerArray.push(innerArray)
+        outerArray.push(innerArray);
     }
-    return outerArray
+    return outerArray;
 }
 
 
@@ -55,7 +55,7 @@ function outer(a1, a2) {
  * Applies a function to a nested array
  * Ref: https://stackoverflow.com/a/58223155/7174982
  */
-const deepMap = (input, callback) => input.map(entry => entry.map ? deepMap(entry, callback) : callback(entry))
+const deepMap = (input, callback) => input.map(entry => entry.map ? deepMap(entry, callback) : callback(entry));
 
 /**
  * Cartesian product of multiple arrays
