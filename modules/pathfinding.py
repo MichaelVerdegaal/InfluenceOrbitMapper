@@ -1,3 +1,5 @@
+from modules.asteroids import rock_name
+
 def time_flying():
     """
     Dummy function to calculate time spent flying
@@ -19,12 +21,11 @@ def calculate_routes(starting_asteroid, target_asteroids):
     Dummy function to calculate routes
     :param starting_asteroid: starting asteroid
     :param target_asteroids:
-    :return:
+    :return: dict with route information
     """
-    route_list = []
-    for target in target_asteroids:
-        route = {'path': [1, 2],
-                 'distance': get_distance(),
-                 'time': time_flying()}
-        route_list.append(route)
-    return route_list
+    return {'path': [starting_asteroid['i'], 50, target_asteroids[0]['i']],
+            'time': '2 hours, 4 minutes',
+            'distance': 100,
+            'start': rock_name(starting_asteroid),
+            'target': rock_name(target_asteroids[0])
+            }

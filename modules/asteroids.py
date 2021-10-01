@@ -52,3 +52,12 @@ def radius_to_size(radius):
         return SIZES[2]
     else:
         return SIZES[3]
+
+
+def rock_name(asteroid):
+    """
+    Returns the proper display name for an asteroid name, with the custom one taking priority
+    :param asteroid: asteroid as dict
+    :return: name as string
+    """
+    return asteroid['customName'] if asteroid['customName'] else asteroid['baseName']

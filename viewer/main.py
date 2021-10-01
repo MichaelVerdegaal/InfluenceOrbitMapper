@@ -3,8 +3,9 @@ import json
 from flask import render_template, abort, request
 from jinja2 import TemplateNotFound
 
-from modules.asteroids import get_roid, load_roids, radius_to_size
+from modules.asteroids import get_roid, load_roids, radius_to_size, rock_name
 from modules.orbits import full_position, position_at_adalia_day, get_current_adalia_day, get_current_position
+from modules.pathfinding import calculate_routes
 from viewer import create_app
 
 asteroids_df = load_roids('asteroids_20210917.json')
@@ -30,14 +31,15 @@ def get_routes_calculated():
     response = {
         'starting_asteroids': [{'id': rock['i'],
                                 'size': radius_to_size(rock['r']),
-                                'name': rock['customName'] if rock['customName'] else rock['baseName'],
+                                'name': rock_name(rock),
                                 'pos': get_current_position(rock),
                                 'orbit': full_position(rock)} for rock in start_asteroids],
         'target_asteroids': [{'id': rock['i'],
                               'size': radius_to_size(rock['r']),
-                              'name': rock['customName'] if rock['customName'] else rock['baseName'],
+                              'name': rock_name(rock),
                               'pos': get_current_position(rock),
                               'orbit': full_position(rock)} for rock in target_asteroids],
+        'route': calculate_routes(start_asteroids[0], target_asteroids)
     }
     return json.dumps(response), 200
 

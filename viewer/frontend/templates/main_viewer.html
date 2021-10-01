@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="container-fluid sidebarInputGroup">
-                        <label for="asteroidTargetInput" class="form-label">Select heuristic used to calculate
+                        <label for="heuristicInput" class="form-label">Select heuristic used to calculate
                             route</label>
                         <select class="js-example-basic-single sidebarInput" name="state" id="heuristicInput">
                             <option value="distance">Closest target</option>
@@ -59,25 +59,25 @@
                 <div class="container-fluid sidebarInputGroup">
                     <div class="card text-center">
                         <div class="card-body">
-                            <h5 class="card-title">From X to Y</h5>
+                            <h5 class="card-title" id="route-title">From X to Y</h5>
                             <ul class="list-group list-group-flush card-list">
                                 <li class="list-group-item">
-                                    <p class="card-text">2 hours, 5 minutes</p>
+                                    <p class="card-text" id="route-time">2 hours, 5 minutes</p>
                                 </li>
                                 <li class="list-group-item">
-                                    <p class="card-text">100 million kilometer</p>
+                                    <p class="card-text" id="route-distance">100 million kilometer</p>
                                 </li>
                                 <li class="list-group-item">
-                                    <p class="card-text">Fuel based heuristic</p>
+                                    <p class="card-text" id="route-heuristic">Fuel based heuristic</p>
                                 </li>
                                 <li class="list-group-item">
-                                    <p class="card-text">104 --> 13 --> 1 --> 44</p>
+                                    <p class="card-text" id="route-path">104 --> 13 --> 1 --> 44</p>
                                 </li>
                             </ul>
 
                         </div>
                         <div class="card-footer">
-                            <small class="text-muted">Calculated at 26-9-2021 21:11</small>
+                            <small class="text-muted" id="route-timestamp">Calculated at 26-9-2021 21:11</small>
                         </div>
                     </div>
                 </div>

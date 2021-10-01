@@ -54,6 +54,25 @@ function asteroidIDList(asteroidInputs) {
     return idList;
 }
 
+function setRouteCard(startName, targetName, distance, time, path, heuristic) {
+    /**
+     *
+     * @param {String} startName - name of starting asteroid
+     * @param {String} targetName - name of target asteroid
+     * @param {Number} distance - distance taken in units of million kilometer
+     * @param {String} time - time taken to travel from start to target
+     * @param {Array} path - Array filled with asteroid ID's to indicate path traveled
+     * @param {String} heuristic - Heuristic used to calculate the best route
+     */
+    document.querySelector('#route-title').textContent = `From ${startName} to ${targetName}`;
+    document.querySelector('#route-distance').textContent = `${distance} million kilometer`;
+    document.querySelector('#route-heuristic').textContent = `Heuristic = ${heuristic}`;
+    document.querySelector('#route-time').textContent = time;
+    document.querySelector('#route-path').textContent = path.join(' --> ');
+
+}
+
+
 function createAsteroidViewer(urlBase) {
     /**
      * Creates the asteroid viewer via Plotly.js
@@ -61,18 +80,27 @@ function createAsteroidViewer(urlBase) {
      */
     let startingAsteroids = $('#asteroidStartInput').select2('data');
     let targetAsteroids = $('#asteroidTargetInput').select2('data');
+    let heuristic = $('#heuristicInput').select2('data')[0].id;
 
     let startAsteroidIDList = asteroidIDList(startingAsteroids);
     let targetAsteroidIDList = asteroidIDList(targetAsteroids);
 
-    postRequest(urlBase, {start_asteroids: startAsteroidIDList, target_asteroids: targetAsteroidIDList})
+    postRequest(urlBase, {
+        start_asteroids: startAsteroidIDList,
+        target_asteroids: targetAsteroidIDList,
+        heuristic: heuristic
+    })
         .then(isOk)
         .then(response => {
+            console.log(response);
             let startingAsteroids = response.starting_asteroids;
             let targetAsteroids = response.target_asteroids;
+            let route = response.route;
+
+            setRouteCard(route.start, route.target, route.distance, route.time, route.path, heuristic);
+
             let traces = createTraces(startingAsteroids, targetAsteroids);
             view_layout.scene.annotations = createAnnotations(startingAsteroids, targetAsteroids);
-
             Plotly.newPlot('view', traces, view_layout, {'responsive': true});
             window.dispatchEvent(new Event('resize')); // Plotly graph doesn't fill screen until window resize
         })
