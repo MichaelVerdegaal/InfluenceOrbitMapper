@@ -1,8 +1,12 @@
+const MARKER_SIZE = {'SMALL': 3, 'MEDIUM': 6, 'LARGE': 9, "HUGE": 15, 'SUN': 30};
+
 function createTraces(startingAsteroids, targetAsteroids) {
     /**
      * Master function to create traces for the 3d view
+     * @param {Array<Object>} startingAsteroids - list of start asteroids
+     * @param {Array<Object>} targerAsteroids - list of target asteroids
+     * @return {Array} - List of all Plotly traces necessary for the asteroid viewer
      */
-    let marker_size = {'SMALL': 3, 'MEDIUM': 6, 'LARGE': 9, "HUGE": 15, 'SUN': 30};
     let traces = [];
 
     // Dimensional anchors
@@ -11,15 +15,15 @@ function createTraces(startingAsteroids, targetAsteroids) {
     }
 
     // Adalia Prime
-    traces.push(sphereTrace(marker_size.SUN, [0, 0, 0], '#eaeaea'));
+    traces.push(sphereTrace(MARKER_SIZE.SUN, [0, 0, 0], '#eaeaea'));
 
     for (let asteroid of startingAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
-        traces.push(sphereTrace(marker_size[asteroid.size], asteroid.pos, '#56a3f2'));
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, '#56a3f2'));
     }
     for (let asteroid of targetAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
-        traces.push(sphereTrace(marker_size[asteroid.size], asteroid.pos, '#4fff7b'));
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, '#4fff7b'));
     }
     return traces;
 }
@@ -28,6 +32,7 @@ function orbitTrace(fullPosition) {
     /**
      * Creates a plotly trace
      * @param fullPosition - List of xyz coordinates
+     * @param {Array} - List of Plotly scatter3D traces
      */
     return {
         x: fullPosition.map(function (value) {
@@ -54,6 +59,10 @@ function orbitTrace(fullPosition) {
 function sphereTrace(size, pos, clr) {
     /**
      * Creates a sphere at a set xyz coordinate by creating new points around it
+     * @param {Number} size - multiplication factor to determine sphere size
+     * @param {Array} pos - List of xyz coordinates
+     * @param {String} clr - Color, string of RGB or hex denotation
+     * @return {Object} - Plotly surface trace as an object
      */
     const theta = makeInterval(0, 2 * Math.PI, 100);
     const phi = makeInterval(0, Math.PI, 100);
@@ -77,7 +86,8 @@ function sphereTrace(size, pos, clr) {
 
 function createDimensionalAnchors() {
     /**
-     * Set fixed points in the view corners to stop spheres from deflating
+     * Create traces at fixed points in the view corners to stop spheres from deflating
+     * @return {Array} - List of Plotly scatter3D traces
      */
     let cornerCombos = cartesian([1000, -1000], [1000, -1000], [1000, -1000]);
     let traceList = [];
@@ -101,6 +111,12 @@ function createDimensionalAnchors() {
 }
 
 function annot(pos, name) {
+    /**
+     * Helper function for annotation creation
+     * @param {Array} pos - List of xyz coordinates
+     * @param {String} name - What text will hover over the annotation
+     * @return {Object} - Object representing a Plotly annotation
+     */
     return {
         showarrow: false,
         x: pos[0],
@@ -115,10 +131,16 @@ function annot(pos, name) {
     };
 }
 
-function createAnnotations(startingOrbits, targetOrbits) {
+function createAnnotations(startingAsteroids, targetAsteroids) {
+    /**
+     * Iterates over the asteroid lists to create an annotation at their location
+     * @param {Array<Object>} startingAsteroids - list of start asteroids
+     * @param {Array<Object>} targerAsteroids - list of target asteroids
+     * @return {Array} - List of objects representing Plotly annotations
+     */
     let annotationList = [];
     annotationList.push(annot([0, 0, 10], 'Adalia'));
-    for (const asteroid of startingOrbits.concat(targetOrbits)) {
+    for (const asteroid of startingAsteroids.concat(targetAsteroids)) {
         let pos = asteroid.pos;
         annotationList.push(annot(pos, asteroid.name));
     }

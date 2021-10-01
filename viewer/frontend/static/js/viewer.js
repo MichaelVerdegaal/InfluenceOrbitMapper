@@ -41,7 +41,8 @@ let view_layout = {
 function asteroidIDList(asteroidInputs) {
     /**
      * Parses inputs from the pillbox to integers
-     * @param asteroidInputs - Select2 values
+     * @param  {Array<Object>} asteroidInputs - Select2 values
+     * @return {Array} - List of integers representing asteroid ID numbers
      */
     let idList = [];
     for (let selection of asteroidInputs) {
@@ -55,8 +56,8 @@ function asteroidIDList(asteroidInputs) {
 
 function createAsteroidViewer(urlBase) {
     /**
-     * Retrieves an asteroid
-     * @param {String} urlBase - endpoint to send request to
+     * Creates the asteroid viewer via Plotly.js
+     * @param {String} urlBase - Endpoint to send route request to
      */
     let startingAsteroids = $('#asteroidStartInput').select2('data');
     let targetAsteroids = $('#asteroidTargetInput').select2('data');
