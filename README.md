@@ -1,11 +1,13 @@
 # InfluencePython
 
-Orbit Mapper is a tool built for the Influence defi game, set in a whole new fictional space system. The tool is meant to assist in visualizing asteroids orbit and their locations, and the ability to plan a route between them with complicated criteria. The tool originated from the need to compare more than 2 asteroids at once, which is not possible in the basegame.
+Orbit Mapper is a tool built for the Influence defi game, set in a whole new fictional space system. The tool is meant
+to assist in visualizing asteroids orbit and their locations, and the ability to plan a route between them with
+complicated criteria. The tool originated from the need to compare more than 2 asteroids at once, which is not possible
+in the basegame.
 
 [![Alt text](https://img.youtube.com/vi/YWPaKscGWPM/0.jpg)](https://youtu.be/YWPaKscGWPM)
 
-
-# Requirements
+## Requirements
 
 - Python 3.8 (or higher)
 - Latest .json data export copied to root directory. You can find
@@ -13,7 +15,7 @@ Orbit Mapper is a tool built for the Influence defi game, set in a whole new fic
   the [influence-utils repo](https://github.com/Influenceth/influence-utils)
 - Packages from requirements.txt installed
 
+## References
 
-# References
-
-- [influence-utils](https://github.com/Influenceth/influence-utils). A repository with tools made by the main developers of Influence.
+- [influence-utils](https://github.com/Influenceth/influence-utils). A repository with tools made by the main developers
+  of Influence.
