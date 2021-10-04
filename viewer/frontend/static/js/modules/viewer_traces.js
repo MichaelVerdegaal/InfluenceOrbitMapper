@@ -36,8 +36,8 @@ function orbitTrace(fullPosition) {
      */
     return {
         x: fullPosition.map((value) => value[0]),
-        y: fullPosition.map((value) => value[0]),
-        z: fullPosition.map((value) => value[0]),
+        y: fullPosition.map((value) => value[1]),
+        z: fullPosition.map((value) => value[2]),
         mode: "markers",
         marker: {
             size: 0.3,
