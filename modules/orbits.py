@@ -1,3 +1,4 @@
+"""Module for orbit calculations and utilities."""
 import math
 
 import numpy as np
@@ -10,10 +11,11 @@ AU_MULTIPLIER = 149.597871
 
 
 def position_at_adalia_day(rock, adalia_day):
-    """
-    Calculates the xyz coordinates of an asteroid at a certain adalia day. Direct copy of
+    """Calculate the xyz coordinates of an asteroid at a certain adalia day.
+
+    This function is a close to direct port from JS to Python from the influence-utils repository.
     https://github.com/Influenceth/influence-utils/blob/00f6838b616d5c7113720b0f883c2a2d55a41267/index.js#L288
-    Translated from JS to Python.
+
     :param rock: asteroid as dict
     :param adalia_day: adalia day to calculate from
     :return: xyz position as numpy array
@@ -58,7 +60,8 @@ def position_at_adalia_day(rock, adalia_day):
 
 def get_current_position(rock):
     """
-    Get the current position of an asteroid
+    Get the current position of an asteroid.
+
     :param rock: asteroid as dict
     :return: xyz position as numpy array
     """
@@ -68,7 +71,8 @@ def get_current_position(rock):
 
 def full_position(rock):
     """
-    Calculate positions vectors for the entire orbit of an asteroid
+    Calculate positions vectors for the entire orbit of an asteroid.
+
     :param rock: asteroid as dict
     :return: position vectors as numpy array
     """
@@ -77,7 +81,8 @@ def full_position(rock):
 
 def calculate_orbital_period(a):
     """
-    Calculate orbital period of asteroid via keplers 3rd law
+    Calculate orbital period of asteroid via keplers 3rd law.
+
     :param a: semi-major axis
     :return: orbital period
     """
@@ -87,7 +92,8 @@ def calculate_orbital_period(a):
 
 def get_current_adalia_day(display_day=False):
     """
-    Get the current adalia day at current time
+    Get the current adalia day at current time.
+
     :param display_day: Which timestamp to use. If true will result in the display date (such as on the website), if
     false can be used to calculate the positions in orbit
     :return: adalia day
@@ -105,7 +111,8 @@ def get_current_adalia_day(display_day=False):
 
 def get_adalia_day_at_time(timestamp):
     """
-    Get the  adalia day at a specified time
+    Get the adalia day at a specified time.
+
     :param timestamp: timestamp. Has to be after the START_TIMESTAMP of 2021-04-17 14:00
     :return: adalia day at date
     """

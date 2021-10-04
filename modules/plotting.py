@@ -1,3 +1,4 @@
+"""Module for plotting locally."""
 import itertools
 
 import numpy as np
@@ -9,7 +10,8 @@ from modules.orbits import get_current_adalia_day, full_position, position_at_ad
 
 def spheres(size, pos, clr):
     """
-    Return a trace for an asteroid as a sphere
+    Return a trace for an asteroid as a sphere.
+
     :param size: sphere size
     :param pos: xyz coordinates
     :param clr: color
@@ -36,7 +38,8 @@ def spheres(size, pos, clr):
 
 def orbits(coordinates, clr='white', wdth=2):
     """
-    Returns a trace for the orbit of an asteroid
+    Return a trace for the orbit of an asteroid.
+
     :param coordinates: list of xyz coordinates
     :param clr: color in hex
     :param wdth: width of trace
@@ -52,7 +55,8 @@ def orbits(coordinates, clr='white', wdth=2):
 
 def annot(xcrd, ycrd, zcrd, txt, xancr='left'):
     """
-    Annotation structure function for plotly
+    Annotation structure function for plotly.
+
     :param xcrd: x position
     :param ycrd: y position
     :param zcrd: z position
@@ -67,7 +71,8 @@ def annot(xcrd, ycrd, zcrd, txt, xancr='left'):
 
 def create_dimensional_anchors():
     """
-    Sets up traces in the corner of the 3d view, which keeps the spheres from deflating.
+    Set up traces in the corner of the 3d view, which keeps the spheres from deflating.
+
     :return: trace list
     """
     corner_combos = list(itertools.product([1000, -1000], [1000, -1000], [1000, -1000]))
@@ -80,7 +85,8 @@ def create_dimensional_anchors():
 
 def plot_asteroids(*rocks):
     """
-    Plot asteroids in 3d space around Adalia
+    Plot asteroids in 3d space around Adalia.
+
     :param rocks: indefinite amount of asteroids (as dict)
     """
     # Init

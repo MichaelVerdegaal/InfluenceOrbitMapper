@@ -1,3 +1,4 @@
+"""Flask launcher file with endpoints."""
 import json
 
 from flask import render_template, abort, request
@@ -14,6 +15,11 @@ app = create_app()  # Flask app set up like this to enable easy hosting
 
 @app.route('/')
 def home():
+    """
+    Render home page.
+
+    :return: html page
+    """
     try:
         return render_template("main_viewer.html")
     except TemplateNotFound:
@@ -22,6 +28,11 @@ def home():
 
 @app.route('/ajax/route', methods=['POST'])
 def get_routes_calculated():
+    """
+    AJAX endpoint to calculate routes between start and target asteroids.
+
+    :return: calculated routes and asteroid information as dict, status code
+    """
     data = request.json
     start_asteroids = data['start_asteroids']
     target_asteroids = data['target_asteroids']
@@ -47,7 +58,8 @@ def get_routes_calculated():
 @app.route('/ajax/asteroid', methods=['POST'])
 def get_asteroids():
     """
-    AJAX endpoint to retrieve a list of asteroids
+    AJAX endpoint to retrieve a list of asteroids.
+
     :return: asteroids as dict, status code
     """
     data = request.json
@@ -59,7 +71,8 @@ def get_asteroids():
 @app.route('/ajax/asteroid/orbit/<int:asteroid_id>')
 def get_asteroid_orbit(asteroid_id):
     """
-    AJAX endpoint to retrieve an asteroid's orbit
+    AJAX endpoint to retrieve an asteroid's orbit.
+
     :param asteroid_id: asteroid id
     :return: asteroid orbit as nested list, status code
     """
@@ -71,7 +84,8 @@ def get_asteroid_orbit(asteroid_id):
 @app.route('/ajax/asteroid/location/<int:asteroid_id>')
 def get_asteroid_current_location(asteroid_id):
     """
-    AJAX endpoint to retrieve an asteroid's current xyz location
+    AJAX endpoint to retrieve an asteroid's current xyz location.
+
     :param asteroid_id: asteroid id
     :return: asteroid location as list, status code
     """
@@ -84,7 +98,8 @@ def get_asteroid_current_location(asteroid_id):
 @app.route('/ajax/datetime/adalia/current')
 def get_adalia_day():
     """
-    AJAX endpoint to retrieve the current adalia day (at time of request)
+    AJAX endpoint to retrieve the current adalia day (at time of request).
+
     :return: current adalia day in dict
     """
     curr_aday = get_current_adalia_day()

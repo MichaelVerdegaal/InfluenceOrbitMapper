@@ -1,7 +1,7 @@
-"""
-Everything in this file is experimental for now, and will not reflect the contents of the repository when it is more
+"""Everything in this file is experimental for now, and will not reflect the contents of the repository when it is more
 production ready.
 """
+
 import numpy as np
 
 from modules.asteroids import load_roids, get_roid

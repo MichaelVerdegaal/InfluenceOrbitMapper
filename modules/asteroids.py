@@ -1,3 +1,4 @@
+"""Module for asteroid utilities."""
 import json
 
 import pandas as pd
@@ -9,7 +10,8 @@ SIZES = ['SMALL', 'MEDIUM', 'LARGE', 'HUGE']
 
 def load_roids(json_file):
     """
-    Loads asteroids from the json file
+    Load asteroids from the source file.
+
     :param json_file: json file path
     :return: dataframe
     """
@@ -27,7 +29,8 @@ def load_roids(json_file):
 
 def get_roid(roids, rock_id):
     """
-    Get an asteroid by it's ID
+    Get an asteroid by its ID.
+
     :param roids: asteroid dataframe
     :param rock_id: id to look up
     :return: asteroid as dataframe
@@ -40,7 +43,8 @@ def get_roid(roids, rock_id):
 
 def radius_to_size(radius):
     """
-    Convert asteroid radius to size category
+    Convert asteroid radius to size category.
+
     :param radius: radius
     :return: category as string
     """
@@ -56,7 +60,8 @@ def radius_to_size(radius):
 
 def rock_name(asteroid):
     """
-    Returns the proper display name for an asteroid name, with the custom one taking priority
+    Return the proper display name for an asteroid name, with the custom one taking priority.
+
     :param asteroid: asteroid as dict
     :return: name as string
     """
