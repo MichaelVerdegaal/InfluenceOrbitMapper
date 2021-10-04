@@ -15,15 +15,15 @@ function createTraces(startingAsteroids, targetAsteroids) {
     }
 
     // Adalia Prime
-    traces.push(sphereTrace(MARKER_SIZE.SUN, [0, 0, 0], '#eaeaea'));
+    traces.push(sphereTrace(MARKER_SIZE.SUN, [0, 0, 0], "#eaeaea"));
 
     for (let asteroid of startingAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
-        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, '#56a3f2'));
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#56a3f2"));
     }
     for (let asteroid of targetAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
-        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, '#4fff7b'));
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#4fff7b"));
     }
     return traces;
 }
@@ -44,15 +44,15 @@ function orbitTrace(fullPosition) {
         z: fullPosition.map(function (value) {
             return value[2];
         }),
-        mode: 'markers',
+        mode: "markers",
         marker: {
             size: 0.3,
             line: {
-                color: 'white',
+                color: "white",
                 width: 5
             },
         },
-        type: 'scatter3d'
+        type: "scatter3d"
     };
 }
 
@@ -68,9 +68,9 @@ function sphereTrace(size, pos, clr) {
     const phi = makeInterval(0, Math.PI, 100);
 
     let xProduct = outer(theta.map((x) => Math.cos(x)), phi.map((x) => Math.sin(x)));
-    let x0 = deepMap(xProduct, x => x * size + pos[0]);
+    let x0 = deepMap(xProduct, (x) => x * size + pos[0]);
     let yProduct = outer(theta.map((x) => Math.sin(x)), phi.map((x) => Math.sin(x)));
-    let y0 = deepMap(yProduct, x => x * size + pos[1]);
+    let y0 = deepMap(yProduct, (x) => x * size + pos[1]);
     let zProduct = outer(new Array(100).fill(1), phi.map((x) => Math.cos(x)));
     let z0 = deepMap(zProduct, (x) => x * size + pos[2]);
 

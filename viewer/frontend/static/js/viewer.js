@@ -14,26 +14,26 @@ let viewLayout = {
     scene: {
         xaxis: {
             title: "Distance X",
-            titlefont_color: '#0a0a0a',
+            titlefont_color: "#0a0a0a",
             range: [-1000, 1000],
-            backgroundcolor: '#0a0a0a',
+            backgroundcolor: "#0a0a0a",
             color: "white",
-            gridcolor: '#0a0a0a'
+            gridcolor: "#0a0a0a"
         },
         yaxis: {
             title: "Distance Y",
-            titlefont_color: '#0a0a0a',
+            titlefont_color: "#0a0a0a",
             range: [-1000, 1000],
-            backgroundcolor: '#0a0a0a',
+            backgroundcolor: "#0a0a0a",
             color: "white",
-            gridcolor: '#0a0a0a'
+            gridcolor: "#0a0a0a"
         },
         zaxis: {
             title: "Distance Z",
             range: [-1000, 1000],
-            backgroundcolor: '#0a0a0a',
+            backgroundcolor: "#0a0a0a",
             color: "white",
-            gridcolor: '#0a0a0a'
+            gridcolor: "#0a0a0a"
         }
     }
 };
@@ -64,11 +64,11 @@ function setRouteCard(startName, targetName, distance, time, path, heuristic) {
      * @param {Array} path - Array filled with asteroid ID's to indicate path traveled
      * @param {String} heuristic - Heuristic used to calculate the best route
      */
-    document.querySelector('#route-title').textContent = `From ${startName} to ${targetName}`;
-    document.querySelector('#route-distance').textContent = `${distance} million kilometer`;
-    document.querySelector('#route-heuristic').textContent = `Heuristic = ${heuristic}`;
-    document.querySelector('#route-time').textContent = time;
-    document.querySelector('#route-path').textContent = path.join(" --> ");
+    document.querySelector("#route-title").textContent = `From ${startName} to ${targetName}`;
+    document.querySelector("#route-distance").textContent = `${distance} million kilometer`;
+    document.querySelector("#route-heuristic").textContent = `Heuristic = ${heuristic}`;
+    document.querySelector("#route-time").textContent = time;
+    document.querySelector("#route-path").textContent = path.join(" --> ");
 
 }
 
@@ -78,10 +78,10 @@ function createAsteroidViewer(urlBase) {
      * Creates the asteroid viewer via Plotly.js
      * @param {String} urlBase - Endpoint to send route request to
      */
-    // Retrieve asteroid tags
-    let startingAsteroids = $('#asteroidStartInput').select2("data");
-    let targetAsteroids = $('#asteroidTargetInput').select2("data");
-    let heuristic = $('#heuristicInput').select2("data")[0].id;
+        // Retrieve asteroid tags
+    let startingAsteroids = $("#asteroidStartInput").select2("data");
+    let targetAsteroids = $("#asteroidTargetInput").select2("data");
+    let heuristic = $("#heuristicInput").select2("data")[0].id;
 
     // Get asteroid ID list
     let startAsteroidIDList = asteroidIDList(startingAsteroids);
@@ -95,7 +95,7 @@ function createAsteroidViewer(urlBase) {
         heuristic: heuristic
     })
         .then(isOk)
-        .then(response => {
+        .then((response) => {
             let startingAsteroids = response.starting_asteroids;
             let targetAsteroids = response.target_asteroids;
             let route = response.route;
@@ -107,8 +107,7 @@ function createAsteroidViewer(urlBase) {
             Plotly.newPlot("view", traces, viewLayout, {responsive: true});
             window.dispatchEvent(new Event("resize")); // Plotly graph doesn't fill screen until window resize
         })
-        .catch(error => {
-            console.log(error);
+        .catch(() => {
             alert("Rocks not found");
         });
 }

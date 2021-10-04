@@ -1,5 +1,8 @@
 # InfluencePython
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d62746887a694002907b83828aa57c89)](https://www.codacy.com/gh/MichaelVerdegaal/InfluenceOrbitMapper/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MichaelVerdegaal/InfluenceOrbitMapper&amp;utm_campaign=Badge_Grade)
+
+
 Orbit Mapper is a tool built for the Influence defi game, set in a whole new fictional space system. The tool is meant
 to assist in visualizing asteroids orbit and their locations, and the ability to plan a route between them with
 complicated criteria. The tool originated from the need to compare more than 2 asteroids at once, which is not possible

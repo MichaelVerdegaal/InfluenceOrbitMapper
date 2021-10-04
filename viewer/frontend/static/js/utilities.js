@@ -64,7 +64,7 @@ function outer(v1, v2) {
  * @param {Response} response - HTTP response
  * @return {Object} HTTP response as JSON
  */
-const isOk = (response) => response.ok ? response.json() : Promise.reject(new Error('Failed the request'));
+const isOk = (response) => response.ok ? response.json() : Promise.reject(new Error("Failed the request"));
 
 /**
  * Applies a function to a nested array
