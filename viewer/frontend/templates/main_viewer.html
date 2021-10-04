@@ -86,37 +86,70 @@
 
         <script>
             $(document).ready(function () {
-                document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
-                    let urlBase = "{{ url_for('get_routes_calculated') }}";
-                    createAsteroidViewer(urlBase);
-                });
-
-                $("#asteroidStartInput").select2({
-                    placeholder: "Enter asteroid ID",
-                    theme: "bootstrap-5",
-                    containerCssClass: "select2--small", // For Select2 v4.0
-                    width: 'style',
-                    tags: true,
-                    tokenSeparators: [',', ' '],
-                });
-
-                $("#asteroidTargetInput").select2({
-                    placeholder: "Enter asteroid ID",
-                    theme: "bootstrap-5",
-                    containerCssClass: "select2--small", // For Select2 v4.0
-                    width: 'style',
-                    tags: true,
-                    tokenSeparators: [',', ' '],
-                });
+                    document.querySelector('#addAsteroidBtn').addEventListener("click", (e) => {
+                        let urlBase = "{{ url_for('get_routes_calculated') }}";
+                        createAsteroidViewer(urlBase);
+                    });
 
 
-                $('#heuristicInput').select2({
-                    width: 'style',
-                    theme: "bootstrap-5",
-                    containerCssClass: "select2--small", // For Select2 v4.0
-                    minimumResultsForSearch: Infinity
-                });
-            });
+                    $("#asteroidStartInput").select2({
+                        placeholder: "Enter asteroid ID",
+                        theme: "bootstrap-5",
+                        containerCssClass: "select2--small", // For Select2 v4.0
+                        width: 'style',
+                        tags: true,
+                        tokenSeparators: [',', ' '],
+                        maximumSelectionLength: 1,
+                        createTag: function (params) {
+                            let term = $.trim(params.term);
+
+                            if (term === '' || !isInt(term)) {
+                                return null;
+                            } else if (parseInt(term) > 250000 || parseInt(term) < 1) {
+                                return null;
+                            }
+
+                            return {
+                                id: params.term,
+                                text: params.term
+                            }
+                        }
+                    });
+
+                    $("#asteroidTargetInput").select2({
+                        placeholder: "Enter asteroid ID",
+                        theme: "bootstrap-5",
+                        containerCssClass: "select2--small", // For Select2 v4.0
+                        width: 'style',
+                        tags: true,
+                        tokenSeparators: [',', ' '],
+                        maximumSelectionLength: 5,
+                        createTag: function (params) {
+                            let term = $.trim(params.term);
+
+                            if (term === '' || !isInt(term)) {
+                                return null;
+                            } else if (parseInt(term) > 250000 || parseInt(term) < 1) {
+                                return null;
+                            }
+
+                            return {
+                                id: params.term,
+                                text: params.term
+                            }
+                        }
+                    });
+
+
+                    $('#heuristicInput').select2({
+                        width: 'style',
+                        theme: "bootstrap-5",
+                        containerCssClass: "select2--small", // For Select2 v4.0
+                        minimumResultsForSearch: Infinity
+                    });
+                }
+            )
+            ;
         </script>
     </div>
 {% endblock %}

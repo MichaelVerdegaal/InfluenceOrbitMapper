@@ -78,12 +78,16 @@ function createAsteroidViewer(urlBase) {
      * Creates the asteroid viewer via Plotly.js
      * @param {String} urlBase - Endpoint to send route request to
      */
+    // Retrieve asteroid tags
     let startingAsteroids = $('#asteroidStartInput').select2('data');
     let targetAsteroids = $('#asteroidTargetInput').select2('data');
     let heuristic = $('#heuristicInput').select2('data')[0].id;
 
+    // Get asteroid ID list
     let startAsteroidIDList = asteroidIDList(startingAsteroids);
+    startAsteroidIDList.length = Math.min(startAsteroidIDList.length, 1);
     let targetAsteroidIDList = asteroidIDList(targetAsteroids);
+    targetAsteroidIDList.length = Math.min(targetAsteroidIDList.length, 5);
 
     postRequest(urlBase, {
         start_asteroids: startAsteroidIDList,
