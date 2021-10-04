@@ -1,3 +1,4 @@
+"""Flask app creation helper."""
 import os
 
 import sass

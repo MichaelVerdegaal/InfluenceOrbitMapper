@@ -35,15 +35,9 @@ function orbitTrace(fullPosition) {
      * @param {Array} - List of Plotly scatter3D traces
      */
     return {
-        x: fullPosition.map(function (value) {
-            return value[0];
-        }),
-        y: fullPosition.map(function (value) {
-            return value[1];
-        }),
-        z: fullPosition.map(function (value) {
-            return value[2];
-        }),
+        x: fullPosition.map((value) => value[0]),
+        y: fullPosition.map((value) => value[0]),
+        z: fullPosition.map((value) => value[0]),
         mode: "markers",
         marker: {
             size: 0.3,
@@ -80,7 +74,7 @@ function sphereTrace(size, pos, clr) {
         x: x0,
         colorscale: [[0, clr], [1, clr]],
         showscale: false,
-        type: 'surface'
+        type: "surface"
     };
 }
 
@@ -100,7 +94,7 @@ function createDimensionalAnchors() {
                 marker: {
                     size: 0.001,
                     line: {
-                        color: 'rgb(5,5,5)',
+                        color: "rgb(5,5,5)",
                     },
                 },
                 type: "scatter3d"

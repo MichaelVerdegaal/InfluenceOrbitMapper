@@ -11,7 +11,8 @@ AU_MULTIPLIER = 149.597871
 
 
 def position_at_adalia_day(rock, adalia_day):
-    """Calculate the xyz coordinates of an asteroid at a certain adalia day.
+    """
+    Calculate the xyz coordinates of an asteroid at a certain adalia day.
 
     This function is a close to direct port from JS to Python from the influence-utils repository.
     https://github.com/Influenceth/influence-utils/blob/00f6838b616d5c7113720b0f883c2a2d55a41267/index.js#L288

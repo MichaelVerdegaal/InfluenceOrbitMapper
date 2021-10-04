@@ -48,7 +48,7 @@ function asteroidIDList(asteroidInputs) {
     for (let selection of asteroidInputs) {
         let asteroidID = selection.text;
         if (isInt(asteroidID)) {
-            idList.push(parseInt(asteroidID));
+            idList.push(parseInt(asteroidID), 10);
         }
     }
     return idList;
