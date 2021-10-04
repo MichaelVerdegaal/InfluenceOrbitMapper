@@ -1,4 +1,4 @@
-const MARKER_SIZE = {'SMALL': 3, 'MEDIUM': 6, 'LARGE': 9, "HUGE": 15, 'SUN': 30};
+const MARKER_SIZE = {"SMALL": 3, "MEDIUM": 6, "LARGE": 9, "HUGE": 15, "SUN": 30};
 
 function createTraces(startingAsteroids, targetAsteroids) {
     /**
@@ -67,12 +67,12 @@ function sphereTrace(size, pos, clr) {
     const theta = makeInterval(0, 2 * Math.PI, 100);
     const phi = makeInterval(0, Math.PI, 100);
 
-    let xProduct = outer(theta.map(x => Math.cos(x)), phi.map(x => Math.sin(x)));
+    let xProduct = outer(theta.map((x) => Math.cos(x)), phi.map((x) => Math.sin(x)));
     let x0 = deepMap(xProduct, x => x * size + pos[0]);
-    let yProduct = outer(theta.map(x => Math.sin(x)), phi.map(x => Math.sin(x)));
+    let yProduct = outer(theta.map((x) => Math.sin(x)), phi.map((x) => Math.sin(x)));
     let y0 = deepMap(yProduct, x => x * size + pos[1]);
-    let zProduct = outer(new Array(100).fill(1), phi.map(x => Math.cos(x)));
-    let z0 = deepMap(zProduct, x => x * size + pos[2]);
+    let zProduct = outer(new Array(100).fill(1), phi.map((x) => Math.cos(x)));
+    let z0 = deepMap(zProduct, (x) => x * size + pos[2]);
 
     return {
         z: z0,
@@ -96,14 +96,14 @@ function createDimensionalAnchors() {
                 x: [c[0]],
                 y: [c[1]],
                 z: [c[2]],
-                mode: 'markers',
+                mode: "markers",
                 marker: {
                     size: 0.001,
                     line: {
                         color: 'rgb(5,5,5)',
                     },
                 },
-                type: 'scatter3d'
+                type: "scatter3d"
             }
         );
     }
@@ -125,7 +125,7 @@ function annot(pos, name) {
         text: name,
         xanchor: 5,
         font: {
-            color: 'white',
+            color: "white",
             size: 12
         }
     };
@@ -139,7 +139,7 @@ function createAnnotations(startingAsteroids, targetAsteroids) {
      * @return {Array} - List of objects representing Plotly annotations
      */
     let annotationList = [];
-    annotationList.push(annot([0, 0, 10], 'Adalia'));
+    annotationList.push(annot([0, 0, 10], "Adalia"));
     for (const asteroid of startingAsteroids.concat(targetAsteroids)) {
         let pos = asteroid.pos;
         annotationList.push(annot(pos, asteroid.name));

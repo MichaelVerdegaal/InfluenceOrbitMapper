@@ -1,5 +1,3 @@
-const isOk = response => response.ok ? response.json() : Promise.reject(new Error('Failed the request'));
-
 function postRequest(url, data) {
     /**
      * Helper function to send a post request.
@@ -7,11 +5,11 @@ function postRequest(url, data) {
      * @param {Object} - Data to send along with the request
      */
     return fetch(url, {
-        credentials: 'same-origin',
-        method: 'POST',
-        mode: 'cors',
+        credentials: "same-origin",
+        method: "POST",
+        mode: "cors",
         body: JSON.stringify(data),
-        headers: {'Content-Type': 'application/json'},
+        headers: {"Content-Type": "application/json"},
     });
 }
 
@@ -22,7 +20,7 @@ function isInt(value) {
      * @param value - Value to check for Integer membership
      * @return {Boolean} - Whether the value is an integer or not
      */
-    return Number.isInteger(value) || Number.isInteger(parseInt(value));
+    return Number.isInteger(value) || Number.isInteger(parseInt(value, 10));
 }
 
 function makeInterval(startValue, stopValue, numPoints) {
@@ -61,6 +59,12 @@ function outer(v1, v2) {
     return outerArray;
 }
 
+/**
+ * Helper function that returns the JSON of a response if the HTTP request was sucessful, and rejects otherwise
+ * @param {Response} response - HTTP response
+ * @return {Object} HTTP response as JSON
+ */
+const isOk = (response) => response.ok ? response.json() : Promise.reject(new Error('Failed the request'));
 
 /**
  * Applies a function to a nested array
@@ -69,7 +73,7 @@ function outer(v1, v2) {
  * @param {} callback - Function to apply to input array
  * @return {Array} - modified input
  */
-const deepMap = (input, callback) => input.map(entry => entry.map ? deepMap(entry, callback) : callback(entry));
+const deepMap = (input, callback) => input.map((entry) => entry.map ? deepMap(entry, callback) : callback(entry));
 
 /**
  * Cartesian product of multiple arrays
@@ -77,4 +81,4 @@ const deepMap = (input, callback) => input.map(entry => entry.map ? deepMap(entr
  * @param {...Array} a - Multiple arrays of size n
  * @return {Array} - Cartesian product of input arrays
  */
-const cartesian = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
+const cartesian = (...a) => a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())));

@@ -105,7 +105,7 @@
 
                             if (term === '' || !isInt(term)) {
                                 return null;
-                            } else if (parseInt(term) > 250000 || parseInt(term) < 1) {
+                            } else if (parseInt(term, 10) > 250000 || parseInt(term, 10) < 1) {
                                 return null;
                             }
 
@@ -129,7 +129,7 @@
 
                             if (term === '' || !isInt(term)) {
                                 return null;
-                            } else if (parseInt(term) > 250000 || parseInt(term) < 1) {
+                            } else if (parseInt(term, 10) > 250000 || parseInt(term, 10) < 1) {
                                 return null;
                             }
 
