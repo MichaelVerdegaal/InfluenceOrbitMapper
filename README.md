@@ -1,5 +1,5 @@
 # InfluencePython
-
+![](https://img.shields.io/badge/python-v3.8-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/d62746887a694002907b83828aa57c89)](https://www.codacy.com/gh/MichaelVerdegaal/InfluenceOrbitMapper/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MichaelVerdegaal/InfluenceOrbitMapper&amp;utm_campaign=Badge_Grade)
 
 Orbit Mapper is a tool built for the Influence defi game, set in a whole new fictional space system. The tool is meant
