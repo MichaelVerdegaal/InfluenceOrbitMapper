@@ -27,6 +27,7 @@ def load_roids(json_file):
 
     roids = pd.json_normalize(roids)  # Flatten nested JSON
     roids['orbital.T'] = roids.apply(lambda x: calculate_orbital_period(x['orbital.a']), axis=1)  # Orbital period
+    roids.set_index('i', inplace=True, drop=False)
     return roids
 
 
@@ -36,10 +37,10 @@ def get_roid(roids, rock_id):
 
     :param roids: asteroid dataframe
     :param rock_id: id to look up
-    :return: asteroid as dataframe
+    :return: asteroid as dict
     """
     if 1 <= rock_id <= 250000:
-        return roids[roids['i'] == rock_id].to_dict(orient='records')[0]
+        return roids.iloc[rock_id].to_dict()
     else:
         raise SyntaxWarning("Improper asteroid ID")
 
