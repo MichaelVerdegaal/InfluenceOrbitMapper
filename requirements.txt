@@ -27,5 +27,6 @@ PyYAML==5.4.1
 scipy==1.7.1
 six==1.16.0
 tenacity==8.0.1
+ujson==4.2.0
 Werkzeug==2.0.1
 xxhash==2.0.2

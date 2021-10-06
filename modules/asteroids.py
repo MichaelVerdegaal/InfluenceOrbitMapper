@@ -1,7 +1,6 @@
 """Module for asteroid utilities."""
-import json
-
 import pandas as pd
+import ujson
 
 from modules.orbits import calculate_orbital_period
 
@@ -18,7 +17,7 @@ def load_roids(json_file):
     roids = []
     with open(json_file) as f:
         for line in f:
-            unpacked_line = json.loads(line)
+            unpacked_line = ujson.loads(line)
             roids.append({'i': unpacked_line['i'],
                           'r': unpacked_line['r'],
                           'baseName': unpacked_line['baseName'],

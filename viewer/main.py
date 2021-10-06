@@ -1,6 +1,5 @@
 """Flask launcher file with endpoints."""
-import json
-
+import ujson
 from flask import render_template, abort, request
 from jinja2 import TemplateNotFound
 
@@ -52,7 +51,7 @@ def get_routes_calculated():
                               'orbit': full_position(rock)} for rock in target_asteroids],
         'route': calculate_routes(start_asteroids[0], target_asteroids)
     }
-    return json.dumps(response), 200
+    return ujson.dumps(response), 200
 
 
 @app.route('/ajax/asteroid', methods=['POST'])
@@ -65,7 +64,7 @@ def get_asteroids():
     data = request.json
     asteroid_id_list = data['asteroid_id_list']
     asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in asteroid_id_list]
-    return json.dumps(asteroids), 200
+    return ujson.dumps(asteroids), 200
 
 
 @app.route('/ajax/asteroid/orbit/<int:asteroid_id>')
@@ -78,7 +77,7 @@ def get_asteroid_orbit(asteroid_id):
     """
     asteroid = get_roid(asteroids_df, asteroid_id)
     orbit = full_position(asteroid)
-    return json.dumps(orbit), 200
+    return ujson.dumps(orbit), 200
 
 
 @app.route('/ajax/asteroid/location/<int:asteroid_id>')
@@ -92,7 +91,7 @@ def get_asteroid_current_location(asteroid_id):
     asteroid = get_roid(asteroids_df, asteroid_id)
     curr_aday = get_current_adalia_day()
     pos = position_at_adalia_day(asteroid, curr_aday)
-    return json.dumps(pos), 200
+    return ujson.dumps(pos), 200
 
 
 @app.route('/ajax/datetime/adalia/current')
@@ -103,4 +102,4 @@ def get_adalia_day():
     :return: current adalia day in dict
     """
     curr_aday = get_current_adalia_day()
-    return json.dumps({'day': curr_aday}), 200
+    return ujson.dumps({'day': curr_aday}), 200
