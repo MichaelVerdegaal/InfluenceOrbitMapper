@@ -18,12 +18,16 @@ def load_roids(json_file):
     roids = []
     with open(json_file) as f:
         for line in f:
-            roids.append(json.loads(line))
+            unpacked_line = json.loads(line)
+            roids.append({'i': unpacked_line['i'],
+                          'r': unpacked_line['r'],
+                          'baseName': unpacked_line['baseName'],
+                          'spectralType': unpacked_line['spectralType'],
+                          'orbital': unpacked_line['orbital'],
+                          'customName': unpacked_line.get('customName', '')})
 
     roids = pd.json_normalize(roids)  # Flatten nested JSON
-    roids = roids.drop(['mintedCrewId', 'rawBonuses', 'scanning', 'purchaseOrder', 'owner'], axis=1)
-    roids['orbital.T'] = roids.apply(lambda x: calculate_orbital_period(x['orbital.a']), axis=1)  # Add orbital period
-    roids['customName'] = roids['customName'].fillna("")  # Replace NaN with empty string to it can be parsed to JSON
+    roids['orbital.T'] = roids.apply(lambda x: calculate_orbital_period(x['orbital.a']), axis=1)  # Orbital period
     return roids
 
 
