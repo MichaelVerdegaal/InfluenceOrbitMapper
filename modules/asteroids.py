@@ -40,7 +40,7 @@ def get_roid(roids, rock_id):
     :return: asteroid as dict
     """
     if 1 <= rock_id <= 250000:
-        return roids.iloc[rock_id].to_dict()
+        return roids.loc[rock_id].to_dict()
     else:
         raise SyntaxWarning("Improper asteroid ID")
 
