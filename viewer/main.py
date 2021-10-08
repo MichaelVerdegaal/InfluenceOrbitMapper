@@ -32,6 +32,15 @@ def get_routes_calculated():
 
     :return: calculated routes and asteroid information as dict, status code
     """
+
+    def pack_path_dict(asteroid_list):
+        """Packs the asteroids into a list of dicts, including the position and path"""
+        return [{**rock,
+                 'size': radius_to_size(rock['r']),
+                 'name': rock_name(rock),
+                 'pos': get_current_position(rock),
+                 'orbit': full_position(rock)} for rock in asteroid_list]
+
     data = request.json
     start_asteroids = data['start_asteroids']
     target_asteroids = data['target_asteroids']
@@ -39,16 +48,8 @@ def get_routes_calculated():
     target_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in target_asteroids]
 
     response = {
-        'starting_asteroids': [{'id': rock['i'],
-                                'size': radius_to_size(rock['r']),
-                                'name': rock_name(rock),
-                                'pos': get_current_position(rock),
-                                'orbit': full_position(rock)} for rock in start_asteroids],
-        'target_asteroids': [{'id': rock['i'],
-                              'size': radius_to_size(rock['r']),
-                              'name': rock_name(rock),
-                              'pos': get_current_position(rock),
-                              'orbit': full_position(rock)} for rock in target_asteroids],
+        'starting_asteroids': pack_path_dict(start_asteroids),
+        'target_asteroids': pack_path_dict(target_asteroids),
         'route': calculate_routes(start_asteroids[0], target_asteroids)
     }
     return ujson.dumps(response), 200
