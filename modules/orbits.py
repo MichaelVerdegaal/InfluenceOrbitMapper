@@ -53,10 +53,10 @@ def position_at_adalia_day(rock, adalia_day):
     r = a * (1 - math.pow(e, 2)) / (1 + e * math.cos(v))  # Current radius in AU
 
     # Cartesian coordinates
-    x = r * (math.cos(o) * math.cos(v + p - o) - (math.sin(o) * math.sin(v + p - o) * math.cos(i)))
-    y = r * (math.sin(o) * math.cos(v + p - o) + math.cos(o) * math.sin(v + p - o) * math.cos(i))
-    z = r * math.sin(v + p - o) * math.sin(i)
-    return (np.array([x, y, z]) * AU_MULTIPLIER).tolist()
+    x = (r * (math.cos(o) * math.cos(v + p - o) - (math.sin(o) * math.sin(v + p - o) * math.cos(i)))) * AU_MULTIPLIER
+    y = (r * (math.sin(o) * math.cos(v + p - o) + math.cos(o) * math.sin(v + p - o) * math.cos(i))) * AU_MULTIPLIER
+    z = (r * math.sin(v + p - o) * math.sin(i)) * AU_MULTIPLIER
+    return [x, y, z]
 
 
 def get_current_position(rock):
