@@ -106,7 +106,7 @@ def plot_asteroids(*rocks):
     # Set up asteroid orbits/spheres
     for rock in rocks:
         # Rock data
-        cur_pos = position_at_adalia_day(rock, curr_aday)
+        cur_pos = position_at_adalia_day(rock['orbital'], curr_aday)
         coordinates = full_position(rock)
         size_category = radius_to_size(rock['r'])
 

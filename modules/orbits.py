@@ -3,6 +3,7 @@ import math
 
 import numpy as np
 import pendulum
+import numba
 
 START_ORBIT_TIMESTAMP = '2021-01-01T00:00:00+00:00'  # Orbit day zero
 START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The Arrival")
@@ -10,25 +11,23 @@ START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The A
 AU_MULTIPLIER = 149.597871
 
 
-def position_at_adalia_day(rock, adalia_day):
+@numba.jit(fastmath=True)
+def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: float, T: int):
     """
     Calculate the xyz coordinates of an asteroid at a certain adalia day.
 
     This function is a close to direct port from JS to Python from the influence-utils repository.
     https://github.com/Influenceth/influence-utils/blob/00f6838b616d5c7113720b0f883c2a2d55a41267/index.js#L288
 
-    :param rock: asteroid as dict
-    :param adalia_day: adalia day to calculate from
-    :return: xyz position as numpy array
+    :param a: Semi-major axis
+    :param e: Eccentricity
+    :param i: Inclination
+    :param o: Longitude of ascending node
+    :param w: Argument of periapsis
+    :param m: Mean anomaly at epoch
+    :param T: Adalia day to calculate from (orbital period)
+    :return: xyz position
     """
-    a = rock['orbital.a']
-    e = rock['orbital.e']
-    i = rock['orbital.i']
-    o = rock['orbital.o']
-    w = rock['orbital.w']
-    m = rock['orbital.m']
-    adalia_day = adalia_day % rock['orbital.T']
-
     # Calculate the longitude of perihelion
     p = w + o
 
@@ -37,7 +36,7 @@ def position_at_adalia_day(rock, adalia_day):
     n = k / math.sqrt(math.pow(a, 3))  # Mean motion
 
     # Calcualate the mean anomoly at elapsed time
-    M = m + (n * adalia_day)
+    M = m + (n * T)
 
     # Estimate the eccentric and true anomolies using an iterative approximation
     E = M
@@ -61,13 +60,21 @@ def position_at_adalia_day(rock, adalia_day):
 
 def get_current_position(rock):
     """
-    Get the current position of an asteroid.
+    Get the current position of an asteroid. Note that if you need to mass-calculate the current position then it's
+    faster to grab the adalia day once, and use position_at_adalia_day() instead
 
     :param rock: asteroid as dict
     :return: xyz position as numpy array
     """
     curr_aday = get_current_adalia_day()
-    return position_at_adalia_day(rock, curr_aday)
+    orbital = rock['orbital']
+    return position_at_adalia_day(orbital['a'],
+                                  orbital['e'],
+                                  orbital['i'],
+                                  orbital['o'],
+                                  orbital['w'],
+                                  orbital['m'],
+                                  curr_aday)
 
 
 def full_position(rock):
@@ -77,16 +84,24 @@ def full_position(rock):
     :param rock: asteroid as dict
     :return: position vectors as numpy array
     """
-    return [position_at_adalia_day(rock, day) for day in range(rock['orbital.T'] + 1)]
+    orbital = rock['orbital']
+    return [position_at_adalia_day(orbital['a'],
+                                   orbital['e'],
+                                   orbital['i'],
+                                   orbital['o'],
+                                   orbital['w'],
+                                   orbital['m'],
+                                   day) for day in range(rock['orbital.T'] + 1)]
 
 
-def calculate_orbital_period(a):
+def calculate_orbital_period(orbital):
     """
     Calculate orbital period of asteroid via keplers 3rd law.
 
-    :param a: semi-major axis
+    :param orbital: dict with orbital parameters
     :return: orbital period
     """
+    a = orbital['a']
     third_law = 0.000007495
     return int(math.sqrt(pow(a, 3) / third_law))
 
@@ -121,3 +136,16 @@ def get_adalia_day_at_time(timestamp):
     time = pendulum.parse(timestamp)
     adalia_days = (time - start_time).total_seconds() / 60 / 60
     return adalia_days
+
+
+def apply_position_to_df(df):
+    """Calculates xyz position for entire dataframe, requires orbital data as colum """
+    curr_aday = get_current_adalia_day()
+    df['pos'] = [position_at_adalia_day(x['a'],
+                                        x['e'],
+                                        x['i'],
+                                        x['o'],
+                                        x['w'],
+                                        x['m'],
+                                        curr_aday) for x in df['orbital']]
+    return df

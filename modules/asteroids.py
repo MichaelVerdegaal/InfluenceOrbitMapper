@@ -2,7 +2,7 @@
 import pandas as pd
 import ujson
 
-from modules.orbits import calculate_orbital_period
+from modules.orbits import calculate_orbital_period, apply_position_to_df
 
 SIZES = ['SMALL', 'MEDIUM', 'LARGE', 'HUGE']
 
@@ -14,21 +14,25 @@ def load_roids(json_file):
     :param json_file: json file path
     :return: dataframe
     """
-    roids = []
+    json_asteroids = []
     with open(json_file) as f:
         for line in f:
             unpacked_line = ujson.loads(line)
-            roids.append({'i': unpacked_line['i'],
-                          'r': unpacked_line['r'],
-                          'baseName': unpacked_line['baseName'],
-                          'spectralType': unpacked_line['spectralType'],
-                          'orbital': unpacked_line['orbital'],
-                          'customName': unpacked_line.get('customName', '')})
+            json_asteroids.append({'i': unpacked_line['i'],
+                                   'r': unpacked_line['r'],
+                                   'baseName': unpacked_line['baseName'],
+                                   'orbital': unpacked_line['orbital'],
+                                   'customName': unpacked_line.get('customName', '')})
 
-    roids = pd.json_normalize(roids)  # Flatten nested JSON
-    roids['orbital.T'] = roids.apply(lambda x: calculate_orbital_period(x['orbital.a']), axis=1)  # Orbital period
-    roids.set_index('i', inplace=True, drop=False)
-    return roids
+    asteroids_df = pd.DataFrame(json_asteroids)  # Flatten nested JSON
+    asteroids_df['orbital.T'] = [calculate_orbital_period(x) for x in asteroids_df['orbital']]  # Orbital period
+    asteroids_df.set_index('i', inplace=True, drop=False)  # Set asteroid ID as index
+
+    asteroids_df = asteroids_df.astype({'i': 'int32',
+                                        'r': 'int32',
+                                        'orbital.T': 'int16'})  # Reduce int limit to save memory
+    asteroids_df = apply_position_to_df(asteroids_df)
+    return asteroids_df
 
 
 def get_roid(roids, rock_id):
