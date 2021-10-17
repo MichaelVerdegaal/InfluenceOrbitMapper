@@ -72,6 +72,7 @@ class AStar:
         heappush(openSet, startNode)
         while openSet:
             current = heappop(openSet)
+            print(f"openSet length={len([node for node in openSet])}, searchNodes length={len(searchNodes)}, {current=}")
             if self.is_goal_reached(current.data, goal):
                 return self.reconstruct_path(current, reversePath)
             current.out_openset = True

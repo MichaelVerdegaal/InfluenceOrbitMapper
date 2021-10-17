@@ -1,16 +1,15 @@
 """Module for pathfinding calculations and utilities."""
 
 import math
-from timeit import default_timer as timer
 
 from scipy.spatial.distance import cdist
 
-from modules.astart import find_path
+from modules.astar import find_path
 from modules.asteroids import rock_name
 from viewer.main import asteroids_df
 
 
-def sphere_neighbours(df, current_asteroid, radius=50):
+def sphere_neighbours(df, current_asteroid, radius=100):
     """
     Gets the neighbours of the current asteroid in a spherical radius
 
@@ -25,7 +24,7 @@ def sphere_neighbours(df, current_asteroid, radius=50):
 
     # Filters out asteroids that are already way out of range
     current_orbital_period = current_asteroid['orbital.T']
-    orbital_range = 400
+    orbital_range = 1000
     filtered_df = df.loc[df['orbital.T'].between(current_orbital_period - orbital_range,
                                                  current_orbital_period + orbital_range)]
 
