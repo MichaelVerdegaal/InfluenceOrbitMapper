@@ -11,8 +11,14 @@ from viewer.main import asteroids_df
 
 
 def sphere_neighbours(df, current_asteroid, radius=50):
-    """Gets the neighbours of the current asteroid in a spherical radius"""
-    start = timer()
+    """
+    Gets the neighbours of the current asteroid in a spherical radius
+
+    :param df: Dataframe view. Has to contain [i, orbital.T, pos]
+    :param current_asteroid: asteroid to select neighbours from
+    :param radius: in which radius (euclidian) to consider the rocks as neighbours
+    :return: list of dicts of neighbouring asteroids
+    """
     # Init
     index_exclusion = df.index.isin([current_asteroid['i']])
     df = df[~index_exclusion]
@@ -31,9 +37,6 @@ def sphere_neighbours(df, current_asteroid, radius=50):
     dist = cdist(pos_list, [cur_pos], metric='euclidean')
     mask = dist <= radius
     neighbours_df = filtered_df.loc[mask]
-    end = timer()
-
-    # print(f"Neighbour calculation time: {round(end - start, 5)} seconds")
     return neighbours_df.to_dict('records')
 
 
@@ -64,6 +67,13 @@ def calculate_routes(starting_asteroid, target_asteroids, heuristic):
 
 
 def asteroid_distance(a1, a2):
+    """
+    Helper function used in astar to get the distance of asteroids
+
+    :param a1: asteroid dict
+    :param a2: asteroid dict
+    :return: distance as float
+    """
     pos1 = a1['pos']
     pos2 = a2['pos']
     return euclidian(pos1, pos2)
