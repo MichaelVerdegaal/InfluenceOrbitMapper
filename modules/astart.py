@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 """ generic A-Star path searching algorithm """
 
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 from heapq import heappush, heappop
 
 Infinite = float('inf')
 
 
 class AStar:
-    __metaclass__ = ABCMeta
-    __slots__ = ()
-
     class SearchNode:
         __slots__ = ('data', 'gscore', 'fscore',
                      'closed', 'came_from', 'out_openset')
@@ -63,7 +60,7 @@ class AStar:
         if reversePath:
             return _gen()
         else:
-            return reversed(list(_gen()))
+            return list(reversed(list(_gen())))
 
     def astar(self, start, goal, reversePath=False):
         if self.is_goal_reached(start, goal):
@@ -75,7 +72,6 @@ class AStar:
         heappush(openSet, startNode)
         while openSet:
             current = heappop(openSet)
-            print(f"openSet length={len([node for node in openSet])}, searchNodes length={len(searchNodes)}, {current=}")
             if self.is_goal_reached(current.data, goal):
                 return self.reconstruct_path(current, reversePath)
             current.out_openset = True
@@ -97,7 +93,7 @@ class AStar:
                     # re-add the node in order to re-sort the heap
                     openSet.remove(neighbour_node)
                     heappush(openSet, neighbour_node)
-        return None
+        return []
 
 
 def find_path(start, goal, neighbors_fnct, reversePath=False, heuristic_cost_estimate_fnct=lambda a, b: Infinite,
