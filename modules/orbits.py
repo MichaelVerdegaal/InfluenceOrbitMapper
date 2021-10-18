@@ -12,7 +12,7 @@ AU_MULTIPLIER = 149.597871
 
 
 @numba.jit(fastmath=True)
-def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: float, T: int):
+def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: float, aday: int):
     """
     Calculate the xyz coordinates of an asteroid at a certain adalia day.
 
@@ -25,7 +25,7 @@ def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: 
     :param o: Longitude of ascending node
     :param w: Argument of periapsis
     :param m: Mean anomaly at epoch
-    :param T: Adalia day to calculate from (orbital period)
+    :param aday: Adalia day to calculate position at
     :return: xyz position
     """
     # Calculate the longitude of perihelion
@@ -36,7 +36,7 @@ def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: 
     n = k / math.sqrt(math.pow(a, 3))  # Mean motion
 
     # Calcualate the mean anomoly at elapsed time
-    M = m + (n * T)
+    M = m + (n * aday)
 
     # Estimate the eccentric and true anomolies using an iterative approximation
     E = M
