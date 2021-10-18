@@ -50,9 +50,13 @@ def get_routes_calculated():
     start_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in start_asteroids]
     target_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in target_asteroids]
 
+    route = calculate_routes(start_asteroids[0], target_asteroids, heuristic)
+    travel_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in route['path']]
+
     response = {
         'starting_asteroids': pack_path_dict(start_asteroids),
         'target_asteroids': pack_path_dict(target_asteroids),
-        'route': calculate_routes(start_asteroids[0], target_asteroids, heuristic)
+        'travel_asteroids': pack_path_dict(travel_asteroids),
+        'route': route
     }
     return ujson.dumps(response), 200

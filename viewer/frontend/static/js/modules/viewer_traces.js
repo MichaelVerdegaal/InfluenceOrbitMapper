@@ -1,6 +1,6 @@
 const MARKER_SIZE = {"SMALL": 3, "MEDIUM": 6, "LARGE": 9, "HUGE": 15, "SUN": 30};
 
-function createTraces(startingAsteroids, targetAsteroids) {
+function createTraces(startingAsteroids, targetAsteroids, travelAsteroids) {
     /**
      * Master function to create traces for the 3d view
      * @param {Array<Object>} startingAsteroids - list of start asteroids
@@ -20,6 +20,9 @@ function createTraces(startingAsteroids, targetAsteroids) {
     for (let asteroid of startingAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
         traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#56a3f2"));
+    }
+    for (let asteroid of travelAsteroids) {
+    traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#b7b7b7"));
     }
     for (let asteroid of targetAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
@@ -125,7 +128,7 @@ function annot(pos, name) {
     };
 }
 
-function createAnnotations(startingAsteroids, targetAsteroids) {
+function createAnnotations(startingAsteroids, targetAsteroids, travelAsteroids) {
     /**
      * Iterates over the asteroid lists to create an annotation at their location
      * @param {Array<Object>} startingAsteroids - list of start asteroids
@@ -134,7 +137,7 @@ function createAnnotations(startingAsteroids, targetAsteroids) {
      */
     let annotationList = [];
     annotationList.push(annot([0, 0, 10], "Adalia"));
-    for (const asteroid of startingAsteroids.concat(targetAsteroids)) {
+    for (const asteroid of startingAsteroids.concat(targetAsteroids, travelAsteroids)) {
         let pos = asteroid.pos;
         annotationList.push(annot(pos, asteroid.name));
     }

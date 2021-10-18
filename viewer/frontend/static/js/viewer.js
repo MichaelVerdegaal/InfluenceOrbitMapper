@@ -98,12 +98,13 @@ function createAsteroidViewer(urlBase) {
         .then((response) => {
             let startingAsteroids = response.starting_asteroids;
             let targetAsteroids = response.target_asteroids;
+            let travelAsteroids = response.travel_asteroids;
             let route = response.route;
 
             setRouteCard(route.start, route.target, route.distance, route.time, route.path, heuristic);
 
-            let traces = createTraces(startingAsteroids, targetAsteroids);
-            viewLayout.scene.annotations = createAnnotations(startingAsteroids, targetAsteroids);
+            let traces = createTraces(startingAsteroids, targetAsteroids, travelAsteroids);
+            viewLayout.scene.annotations = createAnnotations(startingAsteroids, targetAsteroids, travelAsteroids);
             Plotly.newPlot("view", traces, viewLayout, {responsive: true});
             window.dispatchEvent(new Event("resize")); // Plotly graph doesn't fill screen until window resize
         })
