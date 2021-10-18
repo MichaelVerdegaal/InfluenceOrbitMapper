@@ -108,7 +108,8 @@ function createAsteroidViewer(urlBase) {
             Plotly.newPlot("view", traces, viewLayout, {responsive: true});
             window.dispatchEvent(new Event("resize")); // Plotly graph doesn't fill screen until window resize
         })
-        .catch(() => {
+        .catch((error) => {
+            console.log(error);
             alert("Rocks not found");
         });
 }

@@ -43,15 +43,16 @@ def get_routes_calculated():
                  'orbit': full_position(rock)} for rock in asteroid_list]
 
     data = request.json
-    start_asteroids = data['start_asteroids']
-    target_asteroids = data['target_asteroids']
+    start_asteroid_ids = data['start_asteroids']
+    target_asteroids_ids = data['target_asteroids']
     heuristic = data['heuristic']
 
-    start_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in start_asteroids]
-    target_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in target_asteroids]
+    start_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in start_asteroid_ids]
+    target_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in target_asteroids_ids]
 
     route = calculate_routes(start_asteroids[0], target_asteroids, heuristic)
-    travel_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in route['path']]
+    travel_list = [i for i in route['path'] if i not in (start_asteroid_ids + target_asteroids_ids)]
+    travel_asteroids = [get_roid(asteroids_df, asteroid_id) for asteroid_id in travel_list]
 
     response = {
         'starting_asteroids': pack_path_dict(start_asteroids),
