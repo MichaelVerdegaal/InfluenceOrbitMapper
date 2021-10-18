@@ -14,26 +14,34 @@ function createTraces(startingAsteroids, targetAsteroids, travelAsteroids) {
         traces.push(anchor);
     }
 
-    // Adalia Prime
+    // Adalia Prime trace
     traces.push(sphereTrace(MARKER_SIZE.SUN, [0, 0, 0], "#eaeaea"));
 
+    // Starting asteroid traces
     for (let asteroid of startingAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
         traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#56a3f2"));
     }
+    // Travel asteroids traces
     for (let asteroid of travelAsteroids) {
-    traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#b7b7b7"));
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#b7b7b7"));
     }
+    // Target asteroid traces
     for (let asteroid of targetAsteroids) {
         traces.push(orbitTrace(asteroid.orbit));
         traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#4fff7b"));
+    }
+    // Asteroid path traces
+    let pathAsteroidList = startingAsteroids.concat(travelAsteroids, targetAsteroids);
+    for (let i = 0; i < pathAsteroidList.length - 1; i++) {
+        traces.push(pathTrace(pathAsteroidList[i].pos, pathAsteroidList[i + 1].pos));
     }
     return traces;
 }
 
 function orbitTrace(fullPosition) {
     /**
-     * Creates a plotly trace
+     * Creates a plotly trace for the orbit of an asteroid
      * @param fullPosition - List of xyz coordinates
      * @param {Array} - List of Plotly scatter3D traces
      */
@@ -81,9 +89,30 @@ function sphereTrace(size, pos, clr) {
     };
 }
 
+function pathTrace(pos1, pos2) {
+    /**
+     * Creates a plotly trace for a path line between two asteroids
+     * @param {Array} pos1 - List with xyz coordinates
+     * @param {Array} pos2 - List with xyz coordinates
+     * @param {Array} - Plotly path trace as object
+     */
+    return {
+        x: [pos1[0], pos2[0]],
+        y: [pos1[1], pos2[1]],
+        z: [pos1[2], pos2[2]],
+        mode: "lines",
+        line: {
+            width: 5,
+            color: '#ffffba'
+        },
+        type: "scatter3d"
+    };
+}
+
 function createDimensionalAnchors() {
     /**
-     * Create traces at fixed points in the view corners to stop spheres from deflating
+     * Create traces at fixed points in the view corners to stop spheres from deflating. This happens because plotly
+     * reduce the view ratio if things are plotted together closely.
      * @return {Array} - List of Plotly scatter3D traces
      */
     let cornerCombos = cartesian([1000, -1000], [1000, -1000], [1000, -1000]);
