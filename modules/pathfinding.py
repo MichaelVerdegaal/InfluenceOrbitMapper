@@ -58,8 +58,11 @@ def calculate_routes(starting_asteroid, target_asteroids, heuristic):
 
     print(f"Path = {' --> '.join([str(r['i']) for r in path])}")
     return {'path': [r['i'] for r in path],
-            'time': 'time',
-            'distance': 100,
+            'time': 'Time not available',
+            'distance': round(euclidian(starting_asteroid['pos'], target_asteroids[0]['pos']), 3),
+            # TODO: Cheating the distance for now since we know the pathfinder will pick a straight path, as the only
+            #  heuristic is distance based. This will need to be added up rock by rock in astar.py when more game
+            #  details arrive
             'start': rock_name(starting_asteroid),
             'target': rock_name(target_asteroids[0])
             }
