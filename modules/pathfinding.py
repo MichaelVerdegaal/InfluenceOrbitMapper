@@ -5,8 +5,7 @@ import math
 from scipy.spatial.distance import cdist
 
 from modules.astar import find_path
-from modules.asteroids import rock_name
-from viewer.main import asteroids_df
+from modules.asteroids import rock_name, asteroids_df
 
 
 def sphere_neighbours(df, current_asteroid, radius=100):

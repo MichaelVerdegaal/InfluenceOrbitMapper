@@ -74,3 +74,6 @@ def rock_name(asteroid):
     :return: name as string
     """
     return asteroid['customName'] if asteroid['customName'] else asteroid['baseName']
+
+
+asteroids_df = load_roids('asteroids_20210917.json')
