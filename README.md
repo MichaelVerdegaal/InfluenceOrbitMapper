@@ -32,7 +32,7 @@ in the basegame. Upon this ideas starting building that
 
 ### Run 
 
-The application backend is running via a [Quart](https://pgjones.gitlab.io/quart/) backend, which is an async version 
+The application backend is [Quart](https://pgjones.gitlab.io/quart/), which is an async version 
 of Flask. To run:
 - Set the environment variable `QUART_APP=viewer.main:app`
 - Execute `quart run` in terminal
@@ -44,7 +44,7 @@ the same as above, but don't forget to set the root directory as the working dir
 
 Contributing is welcome! To do so:
 - Read contributing.md 
-- Pick an issue to work on, or submit a new one (preferable with the issue templates)
+- Pick an issue to work on, or submit a new one (preferably adhere to the issue templates)
 
 ## References
 
