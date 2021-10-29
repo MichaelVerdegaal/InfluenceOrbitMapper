@@ -9,11 +9,11 @@ assignees: ''
 
 ### What is happening
 
-Describe the context of the problem, and any actions you took that were relevant.
+Describe what the context of the issue is,
 
-### Why is this an issue
+### How can a change help
 
-Describe why this is a problem for you, someone else or for the project.
+Describe why a change is needed.
 
 ### Proposed change
 
