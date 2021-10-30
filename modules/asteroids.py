@@ -25,7 +25,7 @@ def load_asteroids(json_file: str):
                                    'customName': unpacked_line.get('customName', '')})
 
     asteroids_df = pd.DataFrame(json_asteroids)  # Flatten nested JSON
-    asteroids_df['orbital.T'] = [calculate_orbital_period(x) for x in asteroids_df['orbital']]  # Orbital period
+    asteroids_df['orbital.T'] = [calculate_orbital_period(x['a']) for x in asteroids_df['orbital']]  # Orbital period
     asteroids_df.set_index('i', inplace=True, drop=False)  # Set asteroid ID as index
 
     asteroids_df = asteroids_df.astype({'i': 'int32',

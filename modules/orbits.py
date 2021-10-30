@@ -1,10 +1,10 @@
 """Module for orbit calculations and utilities."""
-import math
 
 import numpy as np
 import pandas as pd
 import pendulum
-import numba
+import numba as nb
+from math import sqrt, pow, cos, sin, tan, atan
 
 START_ORBIT_TIMESTAMP = '2021-01-01T00:00:00+00:00'  # Orbit day zero
 START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The Arrival")
@@ -12,7 +12,7 @@ START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The A
 AU_MULTIPLIER = 149.597871
 
 
-@numba.jit(fastmath=True)
+@nb.jit(nopython=True, fastmath=True)
 def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: float, aday: int):
     """
     Calculate the xyz coordinates of an asteroid at a certain adalia day.
@@ -34,7 +34,7 @@ def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: 
 
     # Calculate mean motion based on assumption that mass of asteroid <<< Sun
     k = 0.01720209895  # Gaussian constant (units are days and AU)
-    n = k / math.sqrt(math.pow(a, 3))  # Mean motion
+    n = k / sqrt(pow(a, 3))  # Mean motion
 
     # Calcualate the mean anomoly at elapsed time
     M = m + (n * aday)
@@ -44,19 +44,19 @@ def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: 
     last_diff = 1
 
     while last_diff > 0.0000001:
-        E1 = M + (e * math.sin(E))
+        E1 = M + (e * sin(E))
         last_diff = np.abs(E1 - E)
         E = E1
 
     # Calculate in heliocentric polar and then convert to cartesian
-    v = 2 * math.atan(math.sqrt((1 + e) / (1 - e)) * math.tan(E / 2))
-    r = a * (1 - math.pow(e, 2)) / (1 + e * math.cos(v))  # Current radius in AU
+    v = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(E / 2))
+    r = a * (1 - pow(e, 2)) / (1 + e * cos(v))  # Current radius in AU
 
     # Cartesian coordinates
-    x = (r * (math.cos(o) * math.cos(v + p - o) - (math.sin(o) * math.sin(v + p - o) * math.cos(i)))) * AU_MULTIPLIER
-    y = (r * (math.sin(o) * math.cos(v + p - o) + math.cos(o) * math.sin(v + p - o) * math.cos(i))) * AU_MULTIPLIER
-    z = (r * math.sin(v + p - o) * math.sin(i)) * AU_MULTIPLIER
-    return [x, y, z]
+    x = (r * (cos(o) * cos(v + p - o) - (sin(o) * sin(v + p - o) * cos(i))))
+    y = (r * (sin(o) * cos(v + p - o) + cos(o) * sin(v + p - o) * cos(i)))
+    z = (r * sin(v + p - o) * sin(i))
+    return [x * AU_MULTIPLIER, y * AU_MULTIPLIER, z * AU_MULTIPLIER]
 
 
 def get_current_position(asteroid: dict):
@@ -95,16 +95,16 @@ def full_position(asteroid: dict):
                                    day) for day in range(asteroid['orbital.T'] + 1)]
 
 
-def calculate_orbital_period(orbital: dict):
+@nb.njit(fastmath=True)
+def calculate_orbital_period(a: float):
     """
     Calculate orbital period of asteroid via keplers 3rd law.
 
-    :param orbital: orbital parameters
+    :param a: semi-major axis
     :return: orbital period
     """
-    a = orbital['a']
     third_law = 0.000007495
-    return int(math.sqrt(pow(a, 3) / third_law))
+    return int(sqrt(pow(a, 3) / third_law))
 
 
 def get_current_adalia_day(display_day: bool = False):

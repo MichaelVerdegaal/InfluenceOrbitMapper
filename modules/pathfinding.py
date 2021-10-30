@@ -1,12 +1,15 @@
 """Module for pathfinding calculations and utilities."""
 
-import math
+from math import sqrt
+from timeit import default_timer as timer
 
 import pandas as pd
 from scipy.spatial.distance import cdist
 
 from modules.astar import find_path
 from modules.asteroids import asteroid_name, asteroids_df
+
+position_df = asteroids_df[['i', 'orbital.T', 'pos']]
 
 
 def sphere_neighbours(df: pd.DataFrame, current_asteroid: dict, radius: int = 100):
@@ -48,15 +51,16 @@ def calculate_routes(starting_asteroid: dict, target_asteroids: list, heuristic:
     :param heuristic: cost function of choice
     :return: dict with route information
     """
-    df = asteroids_df[['i', 'orbital.T', 'pos']]
+    start = timer()
     path = find_path(starting_asteroid,
                      target_asteroids[0],
-                     neighbors_fnct=lambda a: sphere_neighbours(df, a),
+                     neighbors_fnct=lambda a: sphere_neighbours(position_df, a),
                      heuristic_cost_estimate_fnct=asteroid_distance,
                      distance_between_fnct=asteroid_distance,
                      is_goal_reached_fnct=lambda a, b: a['i'] == b['i'])
-
+    end = timer()
     print(f"Path = {' --> '.join([str(r['i']) for r in path])}")
+    print(f"A* took {round(end - start, 7)} seconds to calculate")
     return {'path': [r['i'] for r in path],
             'time': 'Time not available',
             'distance': round(euclidian(starting_asteroid['pos'], target_asteroids[0]['pos']), 3),
@@ -89,4 +93,4 @@ def euclidian(pos1: list, pos2: list):
     @param pos2: list of xyz coordinates
     :return: distance as float
     """
-    return math.sqrt(sum((e1 - e2) ** 2 for e1, e2 in zip(pos1, pos2)))
+    return sqrt(sum((e1 - e2) ** 2 for e1, e2 in zip(pos1, pos2)))
