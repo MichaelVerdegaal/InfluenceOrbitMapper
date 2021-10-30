@@ -7,11 +7,11 @@ from modules.orbits import calculate_orbital_period, apply_position_to_df
 SIZES = ['SMALL', 'MEDIUM', 'LARGE', 'HUGE']
 
 
-def load_roids(json_file):
+def load_asteroids(json_file: str):
     """
     Load asteroids from the source file.
 
-    :param json_file: json file path
+    :param json_file: json file name (path)
     :return: dataframe
     """
     json_asteroids = []
@@ -35,21 +35,21 @@ def load_roids(json_file):
     return asteroids_df
 
 
-def get_roid(roids, rock_id):
+def get_asteroid(df: pd.DataFrame, asteroid_id: int):
     """
     Get an asteroid by its ID.
 
-    :param roids: asteroid dataframe
-    :param rock_id: id to look up
+    :param df: asteroid dataframe
+    :param asteroid_id: id to look up
     :return: asteroid as dict
     """
-    if 1 <= rock_id <= 250000:
-        return roids.loc[rock_id].to_dict()
+    if 1 <= asteroid_id <= 250000:
+        return df.loc[asteroid_id].to_dict()
     else:
         raise SyntaxWarning("Improper asteroid ID")
 
 
-def radius_to_size(radius):
+def radius_to_size(radius: int):
     """
     Convert asteroid radius to size category.
 
@@ -66,14 +66,14 @@ def radius_to_size(radius):
         return SIZES[3]
 
 
-def rock_name(asteroid):
+def asteroid_name(asteroid: dict):
     """
     Return the proper display name for an asteroid name, with the custom one taking priority.
 
-    :param asteroid: asteroid as dict
+    :param asteroid: asteroid of choice
     :return: name as string
     """
     return asteroid['customName'] if asteroid['customName'] else asteroid['baseName']
 
 
-asteroids_df = load_roids('asteroids_20210917.json')
+asteroids_df = load_asteroids('asteroids_20210917.json')

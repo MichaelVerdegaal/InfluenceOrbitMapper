@@ -2,6 +2,7 @@
 import math
 
 import numpy as np
+import pandas as pd
 import pendulum
 import numba
 
@@ -58,16 +59,16 @@ def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: 
     return [x, y, z]
 
 
-def get_current_position(rock):
+def get_current_position(asteroid: dict):
     """
     Get the current position of an asteroid. Note that if you need to mass-calculate the current position then it's
     faster to grab the adalia day once, and use position_at_adalia_day() instead
 
-    :param rock: asteroid as dict
-    :return: xyz position as numpy array
+    :param asteroid: asteroid of selection
+    :return: xyz position as list
     """
     curr_aday = get_current_adalia_day()
-    orbital = rock['orbital']
+    orbital = asteroid['orbital']
     return position_at_adalia_day(orbital['a'],
                                   orbital['e'],
                                   orbital['i'],
@@ -77,28 +78,28 @@ def get_current_position(rock):
                                   curr_aday)
 
 
-def full_position(rock):
+def full_position(asteroid: dict):
     """
-    Calculate positions vectors for the entire orbit of an asteroid.
+    Calculate position vectors for the entire orbit of an asteroid.
 
-    :param rock: asteroid as dict
+    :param asteroid: asteroid of choice
     :return: position vectors as numpy array
     """
-    orbital = rock['orbital']
+    orbital = asteroid['orbital']
     return [position_at_adalia_day(orbital['a'],
                                    orbital['e'],
                                    orbital['i'],
                                    orbital['o'],
                                    orbital['w'],
                                    orbital['m'],
-                                   day) for day in range(rock['orbital.T'] + 1)]
+                                   day) for day in range(asteroid['orbital.T'] + 1)]
 
 
-def calculate_orbital_period(orbital):
+def calculate_orbital_period(orbital: dict):
     """
     Calculate orbital period of asteroid via keplers 3rd law.
 
-    :param orbital: dict with orbital parameters
+    :param orbital: orbital parameters
     :return: orbital period
     """
     a = orbital['a']
@@ -106,7 +107,7 @@ def calculate_orbital_period(orbital):
     return int(math.sqrt(pow(a, 3) / third_law))
 
 
-def get_current_adalia_day(display_day=False):
+def get_current_adalia_day(display_day: bool = False):
     """
     Get the current adalia day at current time.
 
@@ -125,7 +126,7 @@ def get_current_adalia_day(display_day=False):
     return adalia_days
 
 
-def get_adalia_day_at_time(timestamp):
+def get_adalia_day_at_time(timestamp: str):
     """
     Get the adalia day at a specified time.
 
@@ -138,8 +139,13 @@ def get_adalia_day_at_time(timestamp):
     return adalia_days
 
 
-def apply_position_to_df(df):
-    """Calculates xyz position for entire dataframe, requires orbital data as colum """
+def apply_position_to_df(df: pd.DataFrame):
+    """
+    Calculates xyz position for entire dataframe, requires orbital data as column
+
+    :param df: dataframe to apply column to
+    :return: dataframe
+    """
     curr_aday = get_current_adalia_day()
     df['pos'] = [position_at_adalia_day(x['a'],
                                         x['e'],

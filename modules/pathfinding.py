@@ -2,13 +2,14 @@
 
 import math
 
+import pandas as pd
 from scipy.spatial.distance import cdist
 
 from modules.astar import find_path
-from modules.asteroids import rock_name, asteroids_df
+from modules.asteroids import asteroid_name, asteroids_df
 
 
-def sphere_neighbours(df, current_asteroid, radius=100):
+def sphere_neighbours(df: pd.DataFrame, current_asteroid: dict, radius: int = 100):
     """
     Gets the neighbours of the current asteroid in a spherical radius
 
@@ -38,7 +39,7 @@ def sphere_neighbours(df, current_asteroid, radius=100):
     return neighbours_df.to_dict('records')
 
 
-def calculate_routes(starting_asteroid, target_asteroids, heuristic):
+def calculate_routes(starting_asteroid: dict, target_asteroids: list, heuristic: str):
     """
     Calculate routes.
 
@@ -62,12 +63,12 @@ def calculate_routes(starting_asteroid, target_asteroids, heuristic):
             # TODO: Cheating the distance for now since we know the pathfinder will pick a straight path, as the only
             #  heuristic is distance based. This will need to be added up rock by rock in astar.py when more game
             #  details arrive
-            'start': rock_name(starting_asteroid),
-            'target': rock_name(target_asteroids[0])
+            'start': asteroid_name(starting_asteroid),
+            'target': asteroid_name(target_asteroids[0])
             }
 
 
-def asteroid_distance(a1, a2):
+def asteroid_distance(a1: dict, a2: dict):
     """
     Helper function used in astar to get the distance of asteroids
 
@@ -80,7 +81,7 @@ def asteroid_distance(a1, a2):
     return euclidian(pos1, pos2)
 
 
-def euclidian(pos1, pos2):
+def euclidian(pos1: list, pos2: list):
     """
     Calculate the euclidian distance between two cartesian coordinates.
 

@@ -1,44 +1,5 @@
 const MARKER_SIZE = {"SMALL": 3, "MEDIUM": 6, "LARGE": 9, "HUGE": 15, "SUN": 30};
 
-function createTraces(startingAsteroids, targetAsteroids, travelAsteroids) {
-    /**
-     * Master function to create traces for the 3d view
-     * @param {Array<Object>} startingAsteroids - list of start asteroids
-     * @param {Array<Object>} targerAsteroids - list of target asteroids
-     * @return {Array} - List of all Plotly traces necessary for the asteroid viewer
-     */
-    let traces = [];
-
-    // Dimensional anchors
-    for (const anchor of createDimensionalAnchors()) {
-        traces.push(anchor);
-    }
-
-    // Adalia Prime trace
-    traces.push(sphereTrace(MARKER_SIZE.SUN, [0, 0, 0], "#eaeaea"));
-
-    // Starting asteroid traces
-    for (let asteroid of startingAsteroids) {
-        traces.push(orbitTrace(asteroid.orbit));
-        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#56a3f2"));
-    }
-    // Travel asteroids traces
-    for (let asteroid of travelAsteroids) {
-        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#b7b7b7"));
-    }
-    // Target asteroid traces
-    for (let asteroid of targetAsteroids) {
-        traces.push(orbitTrace(asteroid.orbit));
-        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#4fff7b"));
-    }
-    // Asteroid path traces
-    let pathAsteroidList = startingAsteroids.concat(travelAsteroids, targetAsteroids);
-    for (let i = 0; i < pathAsteroidList.length - 1; i++) {
-        traces.push(pathTrace(pathAsteroidList[i].pos, pathAsteroidList[i + 1].pos));
-    }
-    return traces;
-}
-
 function orbitTrace(fullPosition) {
     /**
      * Creates a plotly trace for the orbit of an asteroid
@@ -103,7 +64,7 @@ function pathTrace(pos1, pos2) {
         mode: "lines",
         line: {
             width: 5,
-            color: '#ffffba'
+            color: "#ffffba"
         },
         type: "scatter3d"
     };
@@ -171,4 +132,43 @@ function createAnnotations(startingAsteroids, targetAsteroids, travelAsteroids) 
         annotationList.push(annot(pos, asteroid.name));
     }
     return annotationList;
+}
+
+function createTraces(startingAsteroids, targetAsteroids, travelAsteroids) {
+    /**
+     * Master function to create traces for the 3d view
+     * @param {Array<Object>} startingAsteroids - list of start asteroids
+     * @param {Array<Object>} targerAsteroids - list of target asteroids
+     * @return {Array} - List of all Plotly traces necessary for the asteroid viewer
+     */
+    let traces = [];
+
+    // Dimensional anchors
+    for (const anchor of createDimensionalAnchors()) {
+        traces.push(anchor);
+    }
+
+    // Adalia Prime trace
+    traces.push(sphereTrace(MARKER_SIZE.SUN, [0, 0, 0], "#eaeaea"));
+
+    // Starting asteroid traces
+    for (let asteroid of startingAsteroids) {
+        traces.push(orbitTrace(asteroid.orbit));
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#56a3f2"));
+    }
+    // Travel asteroids traces
+    for (let asteroid of travelAsteroids) {
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#b7b7b7"));
+    }
+    // Target asteroid traces
+    for (let asteroid of targetAsteroids) {
+        traces.push(orbitTrace(asteroid.orbit));
+        traces.push(sphereTrace(MARKER_SIZE[asteroid.size], asteroid.pos, "#4fff7b"));
+    }
+    // Asteroid path traces
+    let pathAsteroidList = startingAsteroids.concat(travelAsteroids, targetAsteroids);
+    for (let i = 0; i < pathAsteroidList.length - 1; i++) {
+        traces.push(pathTrace(pathAsteroidList[i].pos, pathAsteroidList[i + 1].pos));
+    }
+    return traces;
 }

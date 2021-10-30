@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-""" generic A-Star path searching algorithm """
+"""
+This file contains the A* algorithm in use for the pathfinding module. The code is a modified version from
+https://github.com/jrialland/python-astar
+"""
 
 from abc import abstractmethod
 from heapq import heappush, heappop
@@ -31,19 +34,19 @@ class AStar:
 
     @abstractmethod
     def heuristic_cost_estimate(self, current, goal):
-        """Computes the estimated (rough) distance between a node and the goal, this method must be implemented in a subclass. The second parameter is always the goal."""
+        """Computes the estimated (rough) distance between a node and the goal. The second parameter is always the
+        goal."""
         raise NotImplementedError
 
     @abstractmethod
     def distance_between(self, n1, n2):
         """Gives the real distance between two adjacent nodes n1 and n2 (i.e n2 belongs to the list of n1's neighbors).
-           n2 is guaranteed to belong to the list returned by the call to neighbors(n1).
-           This method must be implemented in a subclass."""
+           n2 is guaranteed to belong to the list returned by the call to neighbors(n1)."""
         raise NotImplementedError
 
     @abstractmethod
     def neighbors(self, node):
-        """For a given node, returns (or yields) the list of its neighbors. this method must be implemented in a subclass"""
+        """For a given node, returns (or yields) the list of its neighbors"""
         raise NotImplementedError
 
     def is_goal_reached(self, current, goal):
@@ -51,6 +54,7 @@ class AStar:
         return current == goal
 
     def reconstruct_path(self, last, reversePath=False):
+        """Reconstructs the found path as a list."""
         def _gen():
             current = last
             while current:
@@ -63,22 +67,23 @@ class AStar:
             return list(reversed(list(_gen())))
 
     def astar(self, start, goal, reversePath=False):
+        """Find a path"""
         if self.is_goal_reached(start, goal):
             return [start]
-        searchNodes = {}
-        startNode = searchNodes[start['i']] = AStar.SearchNode(
+        search_nodes = {}
+        start_node = search_nodes[start['i']] = AStar.SearchNode(
             start, gscore=.0, fscore=self.heuristic_cost_estimate(start, goal))
-        openSet = []
-        heappush(openSet, startNode)
-        while openSet:
-            current = heappop(openSet)
-            print(f"openSet length={len([node for node in openSet])}, searchNodes length={len(searchNodes)}, {current=}")
+        open_set = []
+        heappush(open_set, start_node)
+        while open_set:
+            current = heappop(open_set)
+            print(f"openSet length={len([n for n in open_set])}, searchNodes length={len(search_nodes)}, {current=}")
             if self.is_goal_reached(current.data, goal):
                 return self.reconstruct_path(current, reversePath)
             current.out_openset = True
             current.closed = True
             for neighbor in self.neighbors(current.data):
-                neighbour_node = searchNodes.setdefault(neighbor['i'], AStar.SearchNode(neighbor))
+                neighbour_node = search_nodes.setdefault(neighbor['i'], AStar.SearchNode(neighbor))
                 if neighbour_node.closed:
                     continue
                 tentative_gscore = current.gscore + self.distance_between(current.data, neighbour_node.data)
@@ -89,11 +94,11 @@ class AStar:
                 neighbour_node.fscore = tentative_gscore + self.heuristic_cost_estimate(neighbour_node.data, goal)
                 if neighbour_node.out_openset:
                     neighbour_node.out_openset = False
-                    heappush(openSet, neighbour_node)
+                    heappush(open_set, neighbour_node)
                 else:
                     # re-add the node in order to re-sort the heap
-                    openSet.remove(neighbour_node)
-                    heappush(openSet, neighbour_node)
+                    open_set.remove(neighbour_node)
+                    heappush(open_set, neighbour_node)
         return []
 
 

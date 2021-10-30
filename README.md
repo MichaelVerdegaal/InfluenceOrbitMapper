@@ -11,9 +11,9 @@ in the basegame. Upon this ideas starting building that
 
 ## Table of contents
 - [Installation](#installation)
-  + [Requirements](#requirements)
-  + [Dependencies](#dependencies)
-  + [Run](#run)
+  - [Requirements](#requirements)
+  - [Dependencies](#dependencies)
+  - [Run](#run)
 - [Contributing](#contributing)
 - [References](#references)
 
