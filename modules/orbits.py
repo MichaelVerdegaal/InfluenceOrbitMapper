@@ -8,12 +8,12 @@ from math import sqrt, pow, cos, sin, tan, atan
 
 START_ORBIT_TIMESTAMP = '2021-01-01T00:00:00+00:00'  # Orbit day zero
 START_ARRIVAL_TIMESTAMP = '2021-04-17T14:00:00+00:00'  # Adalia day zero ("The Arrival")
-# Astronomical Unit multiplier. 1 point = 1 million kilometer. Used to arrive at correct xyz pos.
-AU_MULTIPLIER = 149.597871
+# Inflation multiplier, used to increase the size of a position for better visual clarity. Number is based of AU
+INFLATE_MULTIPLIER = 149.597871
 
 
 @nb.jit(nopython=True, fastmath=True)
-def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: float, aday: int):
+def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: float, aday: int, inflate: bool = True):
     """
     Calculate the xyz coordinates of an asteroid at a certain adalia day.
 
@@ -27,6 +27,7 @@ def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: 
     :param w: Argument of periapsis
     :param m: Mean anomaly at epoch
     :param aday: Adalia day to calculate position at
+    :param inflate: inflate pos for visual purposes
     :return: xyz position
     """
     # Calculate the longitude of perihelion
@@ -56,7 +57,7 @@ def position_at_adalia_day(a: float, e: float, i: float, o: float, w: float, m: 
     x = (r * (cos(o) * cos(v + p - o) - (sin(o) * sin(v + p - o) * cos(i))))
     y = (r * (sin(o) * cos(v + p - o) + cos(o) * sin(v + p - o) * cos(i)))
     z = (r * sin(v + p - o) * sin(i))
-    return [x * AU_MULTIPLIER, y * AU_MULTIPLIER, z * AU_MULTIPLIER]
+    return [x * INFLATE_MULTIPLIER, y * INFLATE_MULTIPLIER, z * INFLATE_MULTIPLIER] if inflate else [x, y, z]
 
 
 def get_current_position(asteroid: dict):
